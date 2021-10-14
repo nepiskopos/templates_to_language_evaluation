@@ -195,7 +195,7 @@ RUN /root/miniconda3/condabin/conda create --name w2b_cpu python=2.7 tensorflow=
 RUN /root/miniconda3/condabin/conda install --name w2b_cpu -c bioconda perl perl-xml-dom perl-db-file -y
 
 # Fetch code
-RUN git clone https://github.com/tyliupku/wiki2bio
+RUN git clone https://github.com/nbishdev/wiki2bio
 
 # Download original dataset
 RUN /root/miniconda3/bin/gdown --id 15AV8LeWY3nzCKb8RRbM8kwHAp_DUZ5gf -O /root/wiki2bio/original_data/

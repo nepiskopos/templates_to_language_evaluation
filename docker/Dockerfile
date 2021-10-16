@@ -181,6 +181,7 @@ RUN mv /root/tg/*.sh /root/tgen/
 RUN chmod +x /root/tgen/tgen.sh
 
 # Pre-process the E2E dataset
+RUN mkdir /root/tgen/e2e-challenge/input/
 RUN /root/tgen/tgen.sh -preprocess
 
 
@@ -236,11 +237,11 @@ RUN rm -rf /root/original-datasets/wikipedia-biography-dataset/wikipedia-biograp
 RUN rm -rf /root/neural-template-gen/data/e2e_aligned.tar.gz
 RUN rm -rf /root/neural-template-gen/data/wb_aligned.tar.gz
 RUN rm -rf /root/neural-template-gen/segs.tar.gz
+RUN rm -rf /root/wiki2bio/original_data/original_data.zip
 RUN rm -rf /root/ntg/
 RUN rm -rf /root/e2e/
 RUN rm -rf /root/tg/
 RUN rm -rf /root/w2b/
-RUN rm -rf /root/wiki2bio/original_data/original_data.zip
 
 
 

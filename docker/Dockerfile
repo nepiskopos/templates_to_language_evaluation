@@ -191,8 +191,10 @@ RUN /root/tgen/tgen.sh -preprocess
 # Setup two distinct conda environments, one for GPU utilization and one for CPU only
 RUN /root/miniconda3/condabin/conda create --name w2b_gpu python=2.7 tensorflow-gpu=1.15 nltk pandas tabulate -y
 RUN /root/miniconda3/condabin/conda create --name w2b_cpu python=2.7 tensorflow=1.15 nltk pandas tabulate -y
-RUN apt-get install -y perl libxml-perl libxml-libxml-perl cpanminus
-RUN PERL_MM_USE_DEFAULT=1 cpanm XML::DOM
+
+# Install the necessary Perl libraries and modules for ROUGE
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install perl cpanminus libxml-perl libdb-dev
+RUN cpanm XML::DOM DB_File
 
 # Fetch code
 RUN git clone https://github.com/nbishdev/wiki2bio

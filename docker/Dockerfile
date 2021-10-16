@@ -190,9 +190,9 @@ RUN /root/tgen/tgen.sh -preprocess
 
 # Setup two distinct conda environments, one for GPU utilization and one for CPU only
 RUN /root/miniconda3/condabin/conda create --name w2b_gpu python=2.7 tensorflow-gpu=1.15 nltk pandas tabulate -y
-RUN /root/miniconda3/condabin/conda install --name w2b_gpu -c bioconda perl perl-xml-dom perl-db-file -y
 RUN /root/miniconda3/condabin/conda create --name w2b_cpu python=2.7 tensorflow=1.15 nltk pandas tabulate -y
-RUN /root/miniconda3/condabin/conda install --name w2b_cpu -c bioconda perl perl-xml-dom perl-db-file -y
+RUN apt-get install -y perl libxml-perl libxml-libxml-perl cpanminus
+RUN PERL_MM_USE_DEFAULT=1 cpanm XML::DOM
 
 # Fetch code
 RUN git clone https://github.com/nbishdev/wiki2bio

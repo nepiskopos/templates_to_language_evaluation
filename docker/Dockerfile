@@ -4,31 +4,24 @@ FROM nvidia/cuda:10.0-base-ubuntu18.04
 MAINTAINER Nikos Episkopos nepiskopos[at]fogus[dot]gr
 
 
+# Copy the provided directory from host to container
+COPY . /root/
 
-# Update apt sources
-RUN DEBIAN_FRONTEND="noninteractive" apt-get update
-
-# Set locale to en-US
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install locales
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-
-
-
-# Switch to /root as working directory
+# Change working directory
 WORKDIR /root/
 
 # Create a bashrc file
-RUN cp /etc/skel/.bashrc ./
+RUN cp /etc/skel/.bashrc /root/
 
 
 
 # Install necessary tools
 
-# Install system tools through apt
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install wget git tar nano unzip build-essential
+# Update apt sources
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update
+
+# Install tools through apt
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install locales wget git tar nano unzip build-essential perl cpanminus libxml-perl libdb-dev
 
 # Download, install and initialize conda
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -P /root/
@@ -40,13 +33,11 @@ RUN /root/miniconda3/condabin/conda install -c conda-forge gdown -y
 
 
 
-
-# Switch directory
-WORKDIR /root/
-
-# Copy the project directory from host to container
-COPY . /root/
-
+# Set locale to en-US
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 
 
@@ -60,7 +51,6 @@ RUN mv /root/e2e-dataset/ /root/original-datasets/e2e-dataset/
 RUN mv /root/wikipedia-biography-dataset/ /root/original-datasets/wikipedia-biography-dataset/
 RUN cat /root/original-datasets/wikipedia-biography-dataset/wikipedia-biography-dataset.z* >> /root/original-datasets/wikipedia-biography-dataset/wikipedia-biography-dataset.zip
 RUN unzip -o /root/original-datasets/wikipedia-biography-dataset/wikipedia-biography-dataset.zip -d /root/original-datasets/
-
 
 
 
@@ -85,8 +75,7 @@ RUN cp /root/original-datasets/wikipedia-biography-dataset/test/test.box /root/n
 RUN cp /root/original-datasets/wikipedia-biography-dataset/valid/valid.box /root/neural-template-gen/data/wb_aligned/src_valid.txt
 
 # Download pre-trained models
-RUN mkdir /root/neural-template-gen/models/
-RUN mkdir /root/neural-template-gen/models/original_models/
+RUN mkdir -p /root/neural-template-gen/models/original_models/
 RUN /root/miniconda3/bin/gdown --id 1kWHE8h0JB7TOAM69dRjBn_LVlXX6bjNN -O /root/neural-template-gen/models/original_models/
 RUN /root/miniconda3/bin/gdown --id 1MS7gPsXiGD8FSiHhrLO6GFbWH_0rdgT4 -O /root/neural-template-gen/models/original_models/
 RUN /root/miniconda3/bin/gdown --id 1BzCEO-aSK0KTkjbTmPhSvFXK65JYj0xg -O /root/neural-template-gen/models/original_models/
@@ -121,12 +110,13 @@ RUN chmod +x /root/neural-template-gen/ntg_wb_original.sh
 
 
 
-
 # Setup E2E NLG Challenge Evaluation metrics
 
 # Setup a conda environment
 RUN /root/miniconda3/condabin/conda create --name e2e_metrics python=3.6 openjdk=8.0 matplotlib scikit-image future pandas tabulate -y
-RUN /root/miniconda3/condabin/conda install --name e2e_metrics -c bioconda perl perl-xml-twig -y
+
+# Install the necessary Perl modules for ROUGE
+RUN cpanm XML::Twig
 
 # Fetch code
 RUN git clone https://github.com/tuetschek/e2e-metrics
@@ -144,7 +134,6 @@ RUN chmod +x /root/e2e-metrics/measure_scores.py
 RUN mv /root/e2e/*.sh /root/e2e-metrics/
 RUN chmod +x /root/e2e-metrics/e2e_metrics_ntg.sh
 RUN chmod +x /root/e2e-metrics/e2e_metrics_tgen.sh
-
 
 
 
@@ -181,9 +170,7 @@ RUN mv /root/tg/*.sh /root/tgen/
 RUN chmod +x /root/tgen/tgen.sh
 
 # Pre-process the E2E dataset
-RUN mkdir /root/tgen/e2e-challenge/input/
 RUN /root/tgen/tgen.sh -preprocess
-
 
 
 
@@ -193,8 +180,7 @@ RUN /root/tgen/tgen.sh -preprocess
 RUN /root/miniconda3/condabin/conda create --name w2b_gpu python=2.7 tensorflow-gpu=1.15 nltk pandas tabulate -y
 RUN /root/miniconda3/condabin/conda create --name w2b_cpu python=2.7 tensorflow=1.15 nltk pandas tabulate -y
 
-# Install the necessary Perl libraries and modules for ROUGE
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install perl cpanminus libxml-perl libdb-dev
+# Install the necessary Perl modules for ROUGE
 RUN cpanm XML::DOM DB_File
 
 # Fetch code
@@ -225,9 +211,9 @@ RUN mv /root/w2b/*.sh /root/wiki2bio/
 RUN chmod +x /root/wiki2bio/w2b.sh
 
 # Pre-process the WikiBio dataset
-RUN mkdir /root/wiki2bio/processed_data/
+RUN mkdir -p /root/wiki2bio/processed_data/test/test_split_for_rouge/
+RUN mkdir -p /root/wiki2bio/processed_data/valid/valid_split_for_rouge/
 RUN /root/wiki2bio/w2b.sh -preprocess
-
 
 
  
@@ -242,7 +228,6 @@ RUN rm -rf /root/ntg/
 RUN rm -rf /root/e2e/
 RUN rm -rf /root/tg/
 RUN rm -rf /root/w2b/
-
 
 
 

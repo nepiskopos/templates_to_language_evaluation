@@ -201,10 +201,9 @@ RUN unzip -o /root/w2b/evaluation.zip -d /root/wiki2bio/results/
 RUN chmod +x /root/wiki2bio/ROUGE/ROUGE-1.5.5.pl
 
 # Make the Python scripts executable
-RUN mkdir /root/wiki2bio/log/
-RUN mv /root/w2b/*.py /root/wiki2bio/log/
-RUN chmod +x /root/wiki2bio/log/display_test_metrics.py
-RUN chmod +x /root/wiki2bio/log/select_best_model.py
+RUN mv /root/w2b/*.py /root/wiki2bio/
+RUN chmod +x /root/wiki2bio/display_test_metrics.py
+RUN chmod +x /root/wiki2bio/select_best_model.py
 
 # Move the main execution BASH scripts to the proper directory and make them executable
 RUN mv /root/w2b/*.sh /root/wiki2bio/

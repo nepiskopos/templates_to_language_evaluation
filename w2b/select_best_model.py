@@ -7,7 +7,7 @@ import subprocess
 import re
 
 
-def select_best_model(train_log_path, model_path, 
+def select_best_model(train_log_path, model_path, save_path,
                       metric='BLEU', no_copy=False):
     
     # No matter how many epochs does the user let the model be trained,
@@ -89,33 +89,42 @@ def select_best_model(train_log_path, model_path,
                  .format(exec_time, metric, epoch_best, metric_best)
     
     # Get the path of the epoch with the best metric
-    best_model_path = model_path + 'loads/' + str(epoch_best)
+    best_model_path = model_path + '/loads/' + str(epoch_best)
+    
+    # Copy log to the path used by the testing process
+    bash_command = 'cp -r {}/log.txt {}'.format(model_path, save_path)
+    
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
     
     # Copy best model to the path used by the testing process
-    bash_command = 'cp -r {}/. {}'.format(best_model_path, model_path)
+    bash_command = 'cp -r {}/. {}'.format(best_model_path, save_path)
     
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
 
 
-parser = argparse.ArgumentParser(
-    description='Display the average metrics and their corresponding' \
-                'standard deviation of for the E2E challenge'
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(
+        description='Display the average metrics and their corresponding' \
+                    'standard deviation of for the E2E challenge'
     )
-
-parser.add_argument('train_log_path', type=str, action='store',
-                    help='Directory path of the input train log file')
-parser.add_argument('model_path', type=str, action='store',
-                    help='Directory path of the re-trained model.')
-parser.add_argument('-m', '--metric', type=str, default='BLEU',
-                    help='Defaults to "BLEU". The metric that will be ' +
-                    'used to determine the best epoch of the model. Choose ' +
-                    'between "BLEU" and "ROUGE".')
-parser.add_argument('-no_copy', action='store_true', default=False,
-                    help='If used, the BLEU or ROUGE without copy will ' +
-                    'be used to determine the best epoch. Defaults to "False"')
-args = parser.parse_args()
-
-
-select_best_model(args.train_log_path, args.model_path, 
-                  args.metric, args.no_copy)
+    
+    parser.add_argument('train_log_path', type=str, action='store',
+                        help='Directory path of the input train log file')
+    parser.add_argument('model_path', type=str, action='store',
+                        help='Directory path of the re-trained model.')
+    parser.add_argument('save_path', type=str, action='store',
+                        help='Directory path to save the best model.')
+    parser.add_argument('-m', '--metric', type=str, default='BLEU',
+                        help='Defaults to "BLEU". The metric that will be ' +
+                        'used to determine the best epoch of the model. Choose ' +
+                        'between "BLEU" and "ROUGE".')
+    parser.add_argument('-no_copy', action='store_true', default=False,
+                        help='If used, the BLEU or ROUGE without copy will ' +
+                        'be used to determine the best epoch. Defaults to "False"')
+    args = parser.parse_args()
+    
+    
+    select_best_model(args.train_log_path, args.model_path, 
+                      args.save_path, args.metric, args.no_copy)

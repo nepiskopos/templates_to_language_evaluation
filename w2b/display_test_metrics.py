@@ -73,27 +73,28 @@ def display_test_metrics(test_log_path, output_path='',
         print(display.round(3).to_string())
 
 
-parser = argparse.ArgumentParser(
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(
     description='Display the BLEU-4 and ROUGE-4 with and without copy' \
                 'for the model by Liu et al. (2017) on the WikiBio test set'
     )
-
-parser.add_argument('test_log_path', type=str, action='store',
-                    help='Directory path of the input test log file')
-parser.add_argument('-e', '--export', type=str, action='store', 
-                    dest='output_path', default='',
-                    help='If given, the DataFrame is exported as' +
-                    'a csv file to the output path specified by the user')                    
-parser.add_argument('-t', '--table', action='store_true', default=False,
-                    help='Defaults to "False". If given, the DataFrame' +
-                    'is displayed as a table. If not given, the ' +
-                    'DataFrame is displayed as a string')
-parser.add_argument('-f', '--format', action='store', dest='table_format', 
-                    default='psql', help='Table format (see tablefmt in ' +
-                    'tabulate documention) to be displayed only if user has ' + 
-                    'chosen to display table. Defaults to "psql"')
-args = parser.parse_args()
-
-
-display_test_metrics(args.test_log_path, args.output_path, 
-                     args.table, args.table_format)
+    
+    parser.add_argument('test_log_path', type=str, action='store',
+                        help='Directory path of the input test log file')
+    parser.add_argument('-e', '--export', type=str, action='store', 
+                        dest='output_path', default='',
+                        help='If given, the DataFrame is exported as' +
+                        'a csv file to the output path specified by the user')                    
+    parser.add_argument('-t', '--table', action='store_true', default=False,
+                        help='Defaults to "False". If given, the DataFrame' +
+                        'is displayed as a table. If not given, the ' +
+                        'DataFrame is displayed as a string')
+    parser.add_argument('-f', '--format', action='store', dest='table_format', 
+                        default='psql', help='Table format (see tablefmt in ' +
+                        'tabulate documention) to be displayed only if user has ' + 
+                        'chosen to display table. Defaults to "psql"')
+    args = parser.parse_args()
+    
+    
+    display_test_metrics(args.test_log_path, args.output_path, 
+                         args.table, args.table_format)

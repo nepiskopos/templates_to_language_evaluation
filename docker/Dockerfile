@@ -144,7 +144,7 @@ RUN /root/miniconda3/condabin/conda create --name tgen python=3.6 tensorflow=1.1
 RUN /root/miniconda3/condabin/conda install -c conda-forge --name tgen pudb -y
 
 # Fetch code
-RUN git clone https://github.com/nbishdev/tgen
+RUN git clone https://github.com/UFAL-DSG/tgen
 
 # Install all requirements
 RUN /root/miniconda3/envs/tgen/bin/pip3 install -r /root/tgen/requirements.txt

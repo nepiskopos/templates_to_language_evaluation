@@ -82,15 +82,8 @@ elif [[ $1 == -train ]]; then
     rm -rf /root/wiki2bio/results/res/model_retrained_by_user*/
     rm -rf /root/wiki2bio/results/evaluation/model_retrained_by_user*/
     
-    # Modify Main.py for re-training of the model by the user
-    sed -e '/tf.app.flags.DEFINE_string("mode","train","train or test")/ s/^#*//' -i /root/wiki2bio/Main.py
-    sed -e '/tf.app.flags.DEFINE_string("mode","test","train or test")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-    sed -e '/tf.app.flags.DEFINE_string("load","0","load directory")/ s/^#*//' -i /root/wiki2bio/Main.py
-    sed -e '/tf.app.flags.DEFINE_string("load","model_retrained_by_user","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-    sed -e '/tf.app.flags.DEFINE_string("load","model_best_bleu_with","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-    
     # Re-train the model
-    python2 /root/wiki2bio/Main.py
+    python2 /root/wiki2bio/Main.py --mode train
     
     # Get directory of most recently trained model
     ltd=$(ls -1 /root/wiki2bio/results/res/ | tail -n 1)
@@ -107,15 +100,8 @@ elif [[ $1 == -test && $2 == best ]]; then
         mv /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt /root/wiki2bio/results/res/model_best_bleu_with/log_test_old.txt
         mv /root/wiki2bio/results/res/model_best_bleu_with/test_table_new.csv /root/wiki2bio/results/res/model_best_bleu_with/table_test_old.csv
         
-        # Modify Main.py for testing our own pre-trained model
-        sed -e '/tf.app.flags.DEFINE_string("mode","test","train or test")/ s/^#*//' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("mode","train","train or test")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","0","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_best_bleu_with","load directory")/ s/^#*//' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_retrained_by_user","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        
         # Run main for testing our own pre-trained model
-        python2 /root/wiki2bio/Main.py
+        python2 /root/wiki2bio/Main.py --mode test --load model_best_bleu_with
         
         # Rename new test log
         mv /root/wiki2bio/results/res/model_best_bleu_with/log.txt /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt
@@ -131,15 +117,8 @@ elif [[ $1 == -test && $2 == best ]]; then
         mv /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt /root/wiki2bio/results/res/model_best_rouge_with/log_test_old.txt
         mv /root/wiki2bio/results/res/model_best_rouge_with/test_table_new.csv /root/wiki2bio/results/res/model_best_rouge_with/table_test_old.csv
         
-        # Modify Main.py for testing our own pre-trained model
-        sed -e '/tf.app.flags.DEFINE_string("mode","test","train or test")/ s/^#*//' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("mode","train","train or test")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","0","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_best_bleu_with","load directory")/ s/^#*//' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_retrained_by_user","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        
         # Run main for testing our own pre-trained model
-        python2 /root/wiki2bio/Main.py
+        python2 /root/wiki2bio/Main.py --mode test --load model_best_rouge_with
         
         # Rename new test log
         mv /root/wiki2bio/results/res/model_best_rouge_with/log.txt /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt
@@ -159,15 +138,14 @@ elif [[ $1 == -test && $2 == new ]]; then
         mv /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_old.txt
         mv /root/wiki2bio/results/res/model_best_bleu_with_new/test_table_new.csv /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_old.csv
         
-        # Select the best model from the re-trained ones based on 'BLEU' or 'ROUGE'
-        python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log_train.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_bleu_with_new/ -m $3
+        # Select the best model from the re-trained ones based on 'BLEU'
+        python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_bleu_with_new/ -m $3
         
-        # Modify Main.py for testing user's re-trained model
-        sed -e '/tf.app.flags.DEFINE_string("mode","test","train or test")/ s/^#*//' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("mode","train","train or test")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","0","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_best_bleu_with","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_retrained_by_user","load directory")/ s/^#*//' -i /root/wiki2bio/Main.py
+        # Run main for testing user's re-trained model with the best bleu score
+        python2 /root/wiki2bio/Main.py --mode test --load model_best_bleu_with_new
+        
+        # Display results
+        python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with_new/test_table_new.csv -t -f $4
     elif [[ $3 == 'ROUGE' ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_old.txt
@@ -177,22 +155,15 @@ elif [[ $1 == -test && $2 == new ]]; then
         mv /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_old.txt
         mv /root/wiki2bio/results/res/model_best_rouge_with_new/test_table_new.csv /root/wiki2bio/results/res/model_best_rouge_with_new/table_test_old.csv
         
-        # Select the best model from the re-trained ones based on 'BLEU' or 'ROUGE'
+        # Select the best model from the re-trained ones based on 'ROUGE'
         python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log_train.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_rouge_with_new/ -m $3
         
-        # Modify Main.py for testing user's re-trained model
-        sed -e '/tf.app.flags.DEFINE_string("mode","test","train or test")/ s/^#*//' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("mode","train","train or test")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","0","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_best_rouge_with","load directory")/ s/^#*/#/' -i /root/wiki2bio/Main.py
-        sed -e '/tf.app.flags.DEFINE_string("load","model_retrained_by_user","load directory")/ s/^#*//' -i /root/wiki2bio/Main.py
+        # Run main for testing user's re-trained model with the best bleu score
+        python2 /root/wiki2bio/Main.py --mode test --load model_best_rouge_with_new
+        
+        # Display results
+        python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with_new/test_table_new.csv -t -f $4
     fi
-    
-    # Run main for testing our user's re-trained model    
-    python2 /root/wiki2bio/Main.py
-    
-    # Display results
-    python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/log/log_test_new.txt -e /root/wiki2bio/log/test_table_new.csv -t -f $4
 fi
 
 

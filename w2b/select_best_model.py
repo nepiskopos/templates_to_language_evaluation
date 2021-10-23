@@ -62,24 +62,24 @@ def select_best_model(train_log_path, model_path, save_path,
     exec_time = df.time_mins.sum() / 60
     
     try:
-        if metric=='BLEU':
-            if no_copy==False:
-                # Find epoch with max BLEU (with copy) score and its value
-                epoch_best = df.BLEU_copy.idxmax()
-                metric_best = df.BLEU_copy.max()
-            elif no_copy==True:
+        if metric == 'BLEU':
+            if no_copy:
                 # Find epoch with max BLEU score and its value
                 epoch_best = df.BLEU_no_copy.idxmax()
                 metric_best = df.BLEU_no_copy.max()
-        elif metric=='ROUGE':
-            if no_copy==False:
-                # Find epoch with max BLEU score and its value
-                epoch_best = df.ROUGE4_F_copy.idxmax()
-                metric_best = df.ROUGE4_F_copy.max()
-            elif no_copy==True:
+            else:
+                # Find epoch with max BLEU (with copy) score and its value
+                epoch_best = df.BLEU_copy.idxmax()
+                metric_best = df.BLEU_copy.max()
+        elif metric == 'ROUGE':
+            if no_copy:
                 # Find epoch with max BLEU score and its value
                 epoch_best = df.ROUGE4_F_no_copy.idxmax()
                 metric_best = df.ROUGE4_F_no_copy.max()
+            else:
+                # Find epoch with max BLEU score and its value
+                epoch_best = df.ROUGE4_F_copy.idxmax()
+                metric_best = df.ROUGE4_F_copy.max()
     except:
         print 'Please choose a valid metric: "BLEU" or "ROUGE".'
     else:

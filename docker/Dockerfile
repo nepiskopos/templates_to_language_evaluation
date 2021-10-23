@@ -209,6 +209,10 @@ RUN chmod +x /root/wiki2bio/select_best_model.py
 RUN mv /root/w2b/*.sh /root/wiki2bio/
 RUN chmod +x /root/wiki2bio/w2b.sh
 
+# Create directories for placing the new best models
+RUN mkdir /root/wiki2bio/results/res/model_best_bleu_with_new/
+RUN mkdir /root/wiki2bio/results/res/model_best_rouge_with_new/
+
 # Pre-process the WikiBio dataset
 RUN mkdir -p /root/wiki2bio/processed_data/test/test_split_for_rouge/
 RUN mkdir -p /root/wiki2bio/processed_data/valid/valid_split_for_rouge/

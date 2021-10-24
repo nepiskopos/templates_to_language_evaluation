@@ -36,15 +36,15 @@ elif [[ $1 == -train ]]; then
     /root/tgen/e2e-challenge/model/model.pickle.gz
 elif [[ $1 == -gen ]]; then
     # Remove previous pre-processed dataset and outputs
-    #find /root/tgen/e2e-challenge/output/ -type f -name '*.txt' -delete
+    find /root/tgen/e2e-challenge/output/ -type f -name '*.txt' -delete
     
     # Generate outputs on the validation set
-    #python3 /root/tgen/run_tgen.py seq2seq_gen -w /root/tgen/e2e-challenge/output/e2e-valid-outputs.txt -a /root/tgen/e2e-challenge/input/valid-abst.txt \
-    #/root/tgen/e2e-challenge/model/model.pickle.gz /root/tgen/e2e-challenge/input/valid-das.txt
+    python3 /root/tgen/run_tgen.py seq2seq_gen -w /root/tgen/e2e-challenge/output/e2e-valid-outputs.txt -a /root/tgen/e2e-challenge/input/valid-abst.txt \
+    /root/tgen/e2e-challenge/model/model.pickle.gz /root/tgen/e2e-challenge/input/valid-das.txt
 
     # Generate outputs on the test set
-    #python3 /root/tgen/run_tgen.py seq2seq_gen -w /root/tgen/e2e-challenge/output/e2e-test-outputs.txt -a /root/tgen/e2e-challenge/input/test-abst.txt \
-    #/root/tgen/e2e-challenge/model/model.pickle.gz /root/tgen/e2e-challenge/input/test-das.txt
+    python3 /root/tgen/run_tgen.py seq2seq_gen -w /root/tgen/e2e-challenge/output/e2e-test-outputs.txt -a /root/tgen/e2e-challenge/input/test-abst.txt \
+    /root/tgen/e2e-challenge/model/model.pickle.gz /root/tgen/e2e-challenge/input/test-das.txt
     
     # Postprocess the outputs
     python3 /root/tgen/e2e-challenge/postprocess/postprocess.py /root/tgen/e2e-challenge/output/e2e-valid-outputs.txt \

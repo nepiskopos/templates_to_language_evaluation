@@ -108,7 +108,7 @@ elif [[ $1 == -test && $2 == best ]]; then
         
         # Display results
         python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with/table_test_new.csv -t -f $4
-    if [[ $3 == 'ROUGE' ]]; then
+    elif [[ $3 == 'ROUGE' ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with/log_test_old.txt
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with/table_test_old.csv
@@ -125,6 +125,7 @@ elif [[ $1 == -test && $2 == best ]]; then
         
         # Display results
         python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with/table_test_new.csv -t -f $4
+    fi
 elif [[ $1 == -test && $2 == new ]]; then
     # Get directory of most recently trained model
     ltd=$(ls -1 /root/wiki2bio/results/res/ | tail -n 1)

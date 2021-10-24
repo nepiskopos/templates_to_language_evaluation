@@ -140,7 +140,7 @@ elif [[ $1 == -test && $2 == new ]]; then
         mv /root/wiki2bio/results/res/model_best_bleu_with_new/test_table_new.csv /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_old.csv
         
         # Select the best model from the re-trained ones based on 'BLEU'
-        python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_bleu_with_new/ -m $3
+        python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log_train.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_bleu_with_new/ -m $3
         
         # Run main for testing user's re-trained model with the best bleu score
         python2 /root/wiki2bio/Main.py --mode test --load model_best_bleu_with_new

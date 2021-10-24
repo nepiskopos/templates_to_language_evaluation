@@ -88,14 +88,14 @@ def select_best_model(train_log_path, model_path, save_path,
                  with a value of {:0.4f}.''' \
                  .format(exec_time, metric, epoch_best, metric_best)
     
-    # Get the path of the epoch with the best metric
-    best_model_path = model_path + '/loads/' + str(epoch_best)
-    
     # Copy log to the path used by the testing process
-    bash_command = 'cp -r {}/log.txt {}'.format(model_path, save_path)
+    bash_command = 'cp -r {} {}'.format(train_log_path, save_path)
     
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
+    
+    # Get the path of the epoch with the best metric
+    best_model_path = model_path + '/loads/' + str(epoch_best)
     
     # Copy best model to the path used by the testing process
     bash_command = 'cp -r {}/. {}'.format(best_model_path, save_path)

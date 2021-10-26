@@ -107,7 +107,11 @@ elif [[ $1 == -test && $2 == best ]]; then
         mv /root/wiki2bio/results/res/model_best_bleu_with/log.txt /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt
         
         # Display results
-        python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with/table_test_new.csv -t -f $4
+        if [ ! -z "$4" ]; then
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with/table_test_new.csv -t -f $4
+        else
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with/table_test_new.csv -t
+        fi
     elif [[ $3 == 'ROUGE' ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with/log_test_old.txt
@@ -124,7 +128,11 @@ elif [[ $1 == -test && $2 == best ]]; then
         mv /root/wiki2bio/results/res/model_best_rouge_with/log.txt /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt
         
         # Display results
-        python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with/table_test_new.csv -t -f $4
+        if [ ! -z "$4" ]; then
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with/table_test_new.csv -t -f $4
+        else
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with/table_test_new.csv -t
+        fi
     fi
 elif [[ $1 == -test && $2 == new ]]; then
     # Get directory of most recently trained model
@@ -145,8 +153,15 @@ elif [[ $1 == -test && $2 == new ]]; then
         # Run main for testing user's re-trained model with the best bleu score
         python2 /root/wiki2bio/Main.py --mode test --load model_best_bleu_with_new
         
+        # Rename new test log
+        mv /root/wiki2bio/results/res/model_best_bleu_with_new/log.txt /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt
+        
         # Display results
-        python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with_new/test_table_new.csv -t -f $4
+        if [ ! -z "$4" ]; then
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_new.csv -t -f $4
+        else
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_new.csv -t
+        fi
     elif [[ $3 == 'ROUGE' ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_old.txt
@@ -162,8 +177,15 @@ elif [[ $1 == -test && $2 == new ]]; then
         # Run main for testing user's re-trained model with the best bleu score
         python2 /root/wiki2bio/Main.py --mode test --load model_best_rouge_with_new
         
+        # Rename new test log
+        mv /root/wiki2bio/results/res/model_best_rouge_with_new/log.txt /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt
+        
         # Display results
-        python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with_new/test_table_new.csv -t -f $4
+        if [ ! -z "$4" ]; then
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with_new/table_test_new.csv -t -f $4
+        else
+            python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_rouge_with_new/table_test_new.csv -t
+        fi
     fi
 fi
 

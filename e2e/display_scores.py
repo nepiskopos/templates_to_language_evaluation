@@ -54,26 +54,27 @@ def format_metrics(metrics):
     return metrics
 
 
-parser = argparse.ArgumentParser(
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(
     description='Display the average metrics and their corresponding' \
                 'standard deviation of for the E2E challenge'
     )
 
-parser.add_argument('tsv_path', type=str, action='store',
-                    help='Directory path of the input tsv file')
-parser.add_argument('-e', '--export', type=str, action='store', 
-                    dest='output_path', default='',
-                    help='If given, the DataFrame is exported as' +
-                    'a csv file to the output path specified by the user')                    
-parser.add_argument('-t', '--table', action='store_true', default=False,
-                    help='Defaults to "False". If given, the DataFrame' +
-                    'is displayed as a table. If not given, the ' +
-                    'DataFrame is displayed as a string')
-parser.add_argument('-f', '--format', action='store', dest='table_format', 
-                    default='psql', help='Table format (see tablefmt in ' +
-                    'tabulate documention) to be displayed only if user has ' + 
-                    'chosen to display table. Defaults to "psql"')
-args = parser.parse_args()
+    parser.add_argument('tsv_path', type=str, action='store',
+                        help='Directory path of the input tsv file')
+    parser.add_argument('-e', '--export', type=str, action='store', 
+                        dest='output_path', default='',
+                        help='If given, the DataFrame is exported as' +
+                        'a csv file to the output path specified by the user')                    
+    parser.add_argument('-t', '--table', action='store_true', default=False,
+                        help='Defaults to "False". If given, the DataFrame' +
+                        'is displayed as a table. If not given, the ' +
+                        'DataFrame is displayed as a string')
+    parser.add_argument('-f', '--format', action='store', dest='table_format', 
+                        default='psql', help='Table format (see tablefmt in ' +
+                        'tabulate documention) to be displayed only if user has ' + 
+                        'chosen to display table. Defaults to "psql"')
+    args = parser.parse_args()
 
 
-display_metrics(args.tsv_path, args.output_path, args.table, args.table_format)
+    display_metrics(args.tsv_path, args.output_path, args.table, args.table_format)

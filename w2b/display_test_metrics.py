@@ -6,8 +6,7 @@ import re
 from tabulate import tabulate
 
 
-def display_test_metrics(test_log_path, output_path='', 
-                         table=True, table_format='psql'):
+def display_test_metrics(test_log_path, output_path='', table=True, table_format='psql'):
     """
     Display the BLEU-4 and the F-Measure of the ROUGE-4
     for the input test log file given by the user, which is

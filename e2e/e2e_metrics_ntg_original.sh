@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Usage: ./e2e_metrics_ntg_original.sh -nar [or -war] ['psql' (or see tabulate docs - only with -mean_stdev)]
+# Usage: ./e2e_metrics_ntg_original.sh -nar [or -war] ['psql' (or see tabulate docs)]
 
 
 # Load bashrc
@@ -10,7 +10,7 @@ source /root/.bashrc
 
 # Check the corectness of the provided command-line arguments
 if [[ $1 != -nar && $1 != -war ]]; then
-    echo "Usage: ./e2e_metrics_ntg_original.sh -nar [or -war] ['psql' (or see tabulate docs - only with -mean_stdev)]"
+    echo "Usage: ./e2e_metrics_ntg_original.sh -nar [or -war] ['psql' (or see tabulate docs)]"
     
     exit 1
 fi

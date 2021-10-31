@@ -159,14 +159,14 @@ RUN echo 'export TMT_ROOT=$HOME/.treex' >> /root/.bashrc
 
 # Extract models
 RUN mkdir /root/tgen/e2e-challenge/model/
-RUN unzip -o /root/tg/model.zip -d /root/tgen/e2e-challenge/model/
+RUN unzip -o /root/tgen/model.zip -d /root/tgen/e2e-challenge/model/
 
 # Extract outputs
 RUN mkdir /root/tgen/e2e-challenge/output/
-RUN unzip -o /root/tg/output.zip -d /root/tgen/e2e-challenge/output/
+RUN unzip -o /root/tgen/output.zip -d /root/tgen/e2e-challenge/output/
 
 # Move the main execution BASH scripts to the proper directory and make them executable
-RUN mv /root/tg/*.sh /root/tgen/
+RUN mv /root/tgen/*.sh /root/tgen/
 RUN chmod +x /root/tgen/tgen.sh
 
 # Pre-process the E2E dataset
@@ -229,7 +229,7 @@ RUN rm -rf /root/neural-template-gen/segs.tar.gz
 RUN rm -rf /root/wiki2bio/original_data/original_data.zip
 RUN rm -rf /root/ntg/
 RUN rm -rf /root/e2e/
-RUN rm -rf /root/tg/
+RUN rm -rf /root/tgen/
 RUN rm -rf /root/w2b/
 
 

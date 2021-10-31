@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 
-import subprocess
-import shlex
 import argparse
+import shlex
+import subprocess
 import sys
+
 
 def docker_installed():
     print("Checking if Docker is installed and configured on this system...")
@@ -153,7 +154,7 @@ def activate_container(container):
 
 def train_tgen(container):
     print(f"Training TGen in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/tgen/tgen.sh -train'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/tgen/tgen.sh -train'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -167,7 +168,7 @@ def train_tgen(container):
 
 def gen_tgen(container):
     print(f"Generating text using TGen in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/tgen/tgen.sh -gen'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/tgen/tgen.sh -gen'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -181,7 +182,7 @@ def gen_tgen(container):
 
 def eval_tgen(container, t_format):
     print(f"Evaluating TGen's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/e2e-metrics/e2e_metrics_tgen.sh -mean_stdev {t_format}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/e2e-metrics/e2e_metrics_tgen.sh {t_format}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -193,9 +194,9 @@ def eval_tgen(container, t_format):
         print(f"TGen text generation evalutation has failed")
     return result
 
-def train_ntg(container, data, dec, ar, gpu):
+def train_ntg(container, data, ar, dec, gpu):
     print(f"Training NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/neural-template-gen/ntg_{data}.sh -train {dec} {ar} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}.sh -train {ar} {dec} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -207,9 +208,9 @@ def train_ntg(container, data, dec, ar, gpu):
         print(f"NTG's training has failed")
     return result
 
-def seg_ntg(container, data, dec, ar, gpu):
+def seg_ntg(container, data, ar, dec, gpu):
     print(f"Creating Viterbi segmentations using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/neural-template-gen/ntg_{data}.sh -seg {dec} {ar} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}.sh -seg {ar} {dec} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -221,9 +222,9 @@ def seg_ntg(container, data, dec, ar, gpu):
         print(f"NTG Viterbi segmentations creation has failed")
     return result
 
-def gen_ntg(container, data, dec, ar, gpu):
+def gen_ntg(container, data, ar, dec, gpu):
     print(f"Generating text using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/neural-template-gen/ntg_{data}.sh -gen {dec} {ar} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}.sh -gen {ar} {dec} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -237,7 +238,7 @@ def gen_ntg(container, data, dec, ar, gpu):
 
 def gen_ntg_original(container, data, ar, gpu):
     print(f"Generating text using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/neural-template-gen/ntg_{data}_original.sh -gen {ar} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}_original.sh -gen {ar} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -249,11 +250,11 @@ def gen_ntg_original(container, data, ar, gpu):
         print(f"NTG text generation has failed")
     return result
 
-def eval_ntg(container, data, dec, ar, t_format):
+def eval_ntg(container, data, ar, dec, t_format):
     print(f"Evaluating NTG's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/"
     if data == 'e2e':
-        bashCommand = bashCommand + f"e2e-metrics/e2e_metrics_ntg.sh {dec} {ar} -mean_stdev {t_format}'"
+        bashCommand = bashCommand + f"e2e-metrics/e2e_metrics_ntg.sh {ar} {dec} {t_format}'"
     else:
         bashCommand = ''
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
@@ -269,9 +270,9 @@ def eval_ntg(container, data, dec, ar, t_format):
 
 def eval_ntg_original(container, data, ar, t_format):
     print(f"Evaluating NTG's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/"
     if data == 'e2e':
-        bashCommand = bashCommand + f"e2e-metrics/e2e_metrics_ntg_original.sh {ar} -mean_stdev {t_format}'"
+        bashCommand = bashCommand + f"e2e-metrics/e2e_metrics_ntg_original.sh {ar} {t_format}'"
     else:
         bashCommand = ''
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
@@ -287,7 +288,7 @@ def eval_ntg_original(container, data, ar, t_format):
 
 def train_w2b(container, gpu):
     print(f"Training Wiki2Bio in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/wiki2bio/w2b.sh -train {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/wiki2bio/w2b.sh -train {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -301,7 +302,7 @@ def train_w2b(container, gpu):
 
 def gen_w2b(container, model, metric, t_format, gpu):
     print(f"Evaluating Wiki2Bio's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/dbms_project_2/wiki2bio/w2b.sh -test {model} {metric} {t_format} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/wiki2bio/w2b.sh -test {model} {metric} {t_format} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -314,13 +315,13 @@ def gen_w2b(container, model, metric, t_format, gpu):
     return result
 
 
-parser = argparse.ArgumentParser(description='')
-parser.add_argument('-c', type=str, default='dbms', help='docker container name')
-parser.add_argument('-i', type=str, default='bishop/dbms', help='docker image name')
-parser.add_argument('-p', type=str, default='./', help='path to project directory')
-
 if __name__ == "__main__":
-    print("Welcome to Bishop's and Roussis' awesome DMBS project")
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('-c', '--container', type=str, default='dbs', help='docker container name')
+    parser.add_argument('-i', '--image', type=str, default='bishop/dbs', help='docker image name')
+    parser.add_argument('-d', '--directory', type=str, default='./', help='path to project directory')
+    
+    print("Welcome to Nikos' and Dimitris' awesome DBS project")
     print("Checking if your environment is properly configured...")
     
     args = parser.parse_args()
@@ -400,31 +401,7 @@ if __name__ == "__main__":
             if train == 'T':
                 result = train_tgen(args.c)
             elif train == 'NE':
-                dec = '-decayed 0'
-                ar = '-nar'
-                gpu = ''
-                params = input(
-                        "Please press [G]PU, [A]utoregressive, [D]ecayed,\n" +
-                        "in any order," + 
-                        "\n(1)if would like to make use of your " +
-                        "GPU (otherwise CPU is used)," +
-                        "\n(2)if would like to train the autoregressive " +
-                        "variant of the NTG model (otherwise the " +
-                        "non-autoregressive variant is used) and" + 
-                        "\n(3)if you would like to use the decayed model for " +
-                        "template extraction and text generation (otherwise, " +
-                        "the non-decayed model is used)\n" +
-                        "Choice: "
-                        )
-                if 'G' in params:
-                    gpu = '-cuda'
-                if 'A' in params:
-                    ar = '-far'
-                if 'D' in params:
-                    dec = '-decayed 1'
-                result = train_ntg(args.c, 'e2e', dec, ar, gpu)
-            elif train == 'NW':
-                dec = '-decayed 0'
+                dec = ''
                 ar = '-nar'
                 gpu = ''
                 params = input(
@@ -445,8 +422,32 @@ if __name__ == "__main__":
                 if 'A' in params:
                     ar = '-war'
                 if 'D' in params:
-                    dec = '-decayed 1'
-                result = train_ntg(args.c, 'wb', dec, ar, gpu)
+                    dec = '-decay'
+                result = train_ntg(args.c, 'e2e', ar, dec, gpu)
+            elif train == 'NW':
+                dec = ''
+                ar = '-nar'
+                gpu = ''
+                params = input(
+                        "Please press [G]PU, [A]utoregressive, [D]ecayed,\n" +
+                        "in any order," + 
+                        "\n(1)if would like to make use of your " +
+                        "GPU (otherwise CPU is used)," +
+                        "\n(2)if would like to train the autoregressive " +
+                        "variant of the NTG model (otherwise the " +
+                        "non-autoregressive variant is used) and" + 
+                        "\n(3)if you would like to use the decayed model for " +
+                        "template extraction and text generation (otherwise, " +
+                        "the non-decayed model is used)\n" +
+                        "Choice: "
+                        )
+                if 'G' in params:
+                    gpu = '-cuda'
+                if 'A' in params:
+                    ar = '-war'
+                if 'D' in params:
+                    dec = '-decay'
+                result = train_ntg(args.c, 'wb', ar, dec, gpu)
             elif train == 'W':
                 gpu = ''
                 params = input("Please press [G]PU if would like to make use of your GPU (otherwise CPU is used)\n" +
@@ -469,36 +470,7 @@ if __name__ == "__main__":
             if generate == 'T':
                 result = gen_tgen(args.c)
             elif generate == 'NE':
-                dec = '-decayed 0'
-                ar = '-nar'
-                gpu = ''
-                model = ''
-                params = input(
-                        "Please press [G]PU, [A]utoregressive, [D]ecayed, [P]retrained\n" +
-                        "in any order," + 
-                        "\n(1)if would like to make use of your " +
-                        "GPU (otherwise CPU is used)," +
-                        "\n(2)if would like to train the autoregressive " +
-                        "variant of the NTG model (otherwise the " +
-                        "non-autoregressive variant is used)," + 
-                        "\n(3)if you would like to use the decayed model for " +
-                        "text generation (otherwise, the non-decayed model is used) and" +
-                        "\n(4)if you would like to use the pre-trained model for " +
-                        "text generation (otherwise, the new model is used)\n" +
-                        "Choice: "
-                        )
-                if 'G' in params:
-                    gpu = '-cuda'
-                if 'A' in params:
-                    ar = '-far'
-                if 'D' in params:
-                    dec = '-decayed 1'
-                if 'P' in params:
-                    result = gen_ntg_original(args.c, 'e2e', ar, gpu)
-                else:
-                    result = gen_ntg(args.c, 'e2e', dec, ar, gpu)
-            elif generate == 'NW':
-                dec = '-decayed 0'
+                dec = ''
                 ar = '-nar'
                 gpu = ''
                 model = ''
@@ -521,11 +493,40 @@ if __name__ == "__main__":
                 if 'A' in params:
                     ar = '-war'
                 if 'D' in params:
-                    dec = '-decayed 1'
+                    dec = '-decay'
+                if 'P' in params:
+                    result = gen_ntg_original(args.c, 'e2e', ar, gpu)
+                else:
+                    result = gen_ntg(args.c, 'e2e', ar, dec, gpu)
+            elif generate == 'NW':
+                dec = ''
+                ar = '-nar'
+                gpu = ''
+                model = ''
+                params = input(
+                        "Please press [G]PU, [A]utoregressive, [D]ecayed, [P]retrained\n" +
+                        "in any order," + 
+                        "\n(1)if would like to make use of your " +
+                        "GPU (otherwise CPU is used)," +
+                        "\n(2)if would like to train the autoregressive " +
+                        "variant of the NTG model (otherwise the " +
+                        "non-autoregressive variant is used)," + 
+                        "\n(3)if you would like to use the decayed model for " +
+                        "text generation (otherwise, the non-decayed model is used) and" +
+                        "\n(4)if you would like to use the pre-trained model for " +
+                        "text generation (otherwise, the new model is used)\n" +
+                        "Choice: "
+                        )
+                if 'G' in params:
+                    gpu = '-cuda'
+                if 'A' in params:
+                    ar = '-war'
+                if 'D' in params:
+                    dec = '-decay'
                 if 'P' in params:
                     result = gen_ntg_original(args.c, 'wb', ar, gpu)
                 else:
-                    result = gen_ntg(args.c, 'wb', dec, ar, gpu)
+                    result = gen_ntg(args.c, 'wb', ar, dec, gpu)
             elif generate != 'B':
                 print("Wrong input")
         elif action == 'E':
@@ -562,7 +563,7 @@ if __name__ == "__main__":
                         t_format = '\'plain\''
                 result = eval_tgen(args.c, t_format)
             elif evaluate == 'NE':
-                dec = '-decayed 0'
+                dec = ''
                 ar = '-nar'
                 model = ''
                 t_format = '\'psql\''
@@ -581,9 +582,9 @@ if __name__ == "__main__":
                         "Choice: "
                         )
                 if 'A' in params:
-                    ar = '-far'
+                    ar = '-war'
                 if 'D' in params:
-                    dec = '-decayed 1'
+                    dec = '-decay'
                 if 'T' in params:
                     formats = input("Please select one of [L]aTeX, [G]itHub, [H]TML, [P]lain\n" +
                                     "Choice: "
@@ -604,7 +605,7 @@ if __name__ == "__main__":
                 else:
                     result = eval_ntg(args.c, 'e2e', dec, ar, t_format)
             #elif evaluate == 'NW':
-                #dec = '-decayed 0'
+                #dec = ''
                 #ar = '-nar'
                 #model = ''
                 #params = input(
@@ -622,7 +623,7 @@ if __name__ == "__main__":
                 #if 'A' in params:
                     #ar = '-war'
                 #if 'D' in params:
-                    #dec = '-decayed 1'
+                    #dec = '-decay'
                 #if 'P' in params:
                     #result = eval_ntg_original(args.c, 'wb', ar, t_format)
                 #else:

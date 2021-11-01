@@ -5,7 +5,7 @@ MAINTAINER Nikos Episkopos nepiskopos[at]fogus[dot]gr
 
 
 # Copy the provided directory from host to container
-COPY . /root/
+COPY . /root/templates_to_language_evaluation/
 
 # Change working directory
 WORKDIR /root/
@@ -82,31 +82,28 @@ RUN /root/miniconda3/bin/gdown --id 1BzCEO-aSK0KTkjbTmPhSvFXK65JYj0xg -O /root/n
 RUN /root/miniconda3/bin/gdown --id 1vbflX3-qPJcnQeURpbGwR3ybxIDUsbRD -O /root/neural-template-gen/models/original_models/
 
 # Extract new models
-RUN unzip -o /root/ntg/models.zip -d /root/neural-template-gen/models/
+RUN unzip -o /root/templates_to_language_evaluation/ntg/models.zip -d /root/neural-template-gen/models/
 
 # Extract segs
 RUN mkdir /root/neural-template-gen/segs/
 RUN /root/miniconda3/bin/gdown --id 1ON4ROs_coDNmVt3-JON4wK1Kc_NkIV2M -O /root/neural-template-gen/segs/
 RUN tar -xvf /root/neural-template-gen/segs/segs.tar.gz -C /root/neural-template-gen/segs/
 RUN mv /root/neural-template-gen/segs/segs/ /root/neural-template-gen/segs/original_segs/
-RUN unzip -o /root/ntg/segs.zip -d /root/neural-template-gen/segs/
+RUN unzip -o /root/templates_to_language_evaluation/ntg/segs.zip -d /root/neural-template-gen/segs/
 
 # Extract the generations
 RUN mkdir /root/neural-template-gen/gens/
-RUN unzip -o /root/ntg/gens.zip -d /root/neural-template-gen/gens/
+RUN unzip -o /root/templates_to_language_evaluation/ntg/gens.zip -d /root/neural-template-gen/gens/
 RUN mkdir /root/neural-template-gen/gens_postprocessed/
-RUN unzip -o /root/ntg/gens_postprocessed.zip -d /root/neural-template-gen/gens_postprocessed/
+RUN unzip -o /root/templates_to_language_evaluation/ntg/gens_postprocessed.zip -d /root/neural-template-gen/gens_postprocessed/
 
 # Move the post-process Python script to the proper directory and make it executable
-RUN mv /root/ntg/*.py /root/neural-template-gen/gens/
-RUN chmod +x /root/neural-template-gen/gens/postprocess_gens_e2e.py
+RUN mv /root/templates_to_language_evaluation/ntg/*.py /root/neural-template-gen/gens/
+RUN chmod +x /root/neural-template-gen/gens/*.py
 
 # Move the main execution BASH scripts to the proper directory and make them executable
-RUN mv /root/ntg/*.sh /root/neural-template-gen
-RUN chmod +x /root/neural-template-gen/ntg_e2e.sh
-RUN chmod +x /root/neural-template-gen/ntg_e2e_original.sh
-RUN chmod +x /root/neural-template-gen/ntg_wb.sh
-RUN chmod +x /root/neural-template-gen/ntg_wb_original.sh
+RUN mv /root/templates_to_language_evaluation/ntg/*.sh /root/neural-template-gen
+RUN chmod +x /root/neural-template-gen/*.sh
 
 
 
@@ -123,17 +120,15 @@ RUN git clone https://github.com/tuetschek/e2e-metrics
 
 # Extract the output scores
 RUN mkdir /root/e2e-metrics/output_scores/
-RUN unzip -o /root/e2e/output_scores.zip -d /root/e2e-metrics/output_scores/
+RUN unzip -o /root/templates_to_language_evaluation/e2e/output_scores.zip -d /root/e2e-metrics/output_scores/
 
 # Move the evaluation & display Python scripts to the proper directory and make them executable
-RUN mv /root/e2e/*.py /root/e2e-metrics/
-RUN chmod +x /root/e2e-metrics/display_scores.py
-RUN chmod +x /root/e2e-metrics/measure_scores.py
+RUN mv /root/templates_to_language_evaluation/e2e/*.py /root/e2e-metrics/
+RUN chmod +x /root/e2e-metrics/*.py
 
 # Move the main execution BASH scripts to the proper directory and make them executable
-RUN mv /root/e2e/*.sh /root/e2e-metrics/
-RUN chmod +x /root/e2e-metrics/e2e_metrics_ntg.sh
-RUN chmod +x /root/e2e-metrics/e2e_metrics_tgen.sh
+RUN mv /root/templates_to_language_evaluation/e2e/*.sh /root/e2e-metrics/
+RUN chmod +x /root/e2e-metrics/*.sh
 
 
 
@@ -159,15 +154,15 @@ RUN echo 'export TMT_ROOT=$HOME/.treex' >> /root/.bashrc
 
 # Extract models
 RUN mkdir /root/tgen/e2e-challenge/model/
-RUN unzip -o /root/tgen/model.zip -d /root/tgen/e2e-challenge/model/
+RUN unzip -o /root/templates_to_language_evaluation/tgen/model.zip -d /root/tgen/e2e-challenge/model/
 
 # Extract outputs
 RUN mkdir /root/tgen/e2e-challenge/output/
-RUN unzip -o /root/tgen/output.zip -d /root/tgen/e2e-challenge/output/
+RUN unzip -o /root/templates_to_language_evaluation/tgen/output.zip -d /root/tgen/e2e-challenge/output/
 
 # Move the main execution BASH scripts to the proper directory and make them executable
-RUN mv /root/tgen/*.sh /root/tgen/
-RUN chmod +x /root/tgen/tgen.sh
+RUN mv /root/templates_to_language_evaluation/tgen/*.sh /root/tgen/
+RUN chmod +x /root/tgen/*.sh
 
 # Pre-process the E2E dataset
 RUN /root/tgen/tgen.sh -preprocess
@@ -194,20 +189,19 @@ RUN unzip -o /root/wiki2bio/original_data/original_data.zip -d /root/wiki2bio/
 
 # Extract the results
 RUN mkdir /root/wiki2bio/results/
-RUN unzip -o /root/w2b/res.zip -d /root/wiki2bio/results/
-RUN unzip -o /root/w2b/evaluation.zip -d /root/wiki2bio/results/
+RUN unzip -o /root/templates_to_language_evaluation/w2b/res.zip -d /root/wiki2bio/results/
+RUN unzip -o /root/templates_to_language_evaluation/w2b/evaluation.zip -d /root/wiki2bio/results/
 
 # Make the perl script executable
 RUN chmod +x /root/wiki2bio/ROUGE/ROUGE-1.5.5.pl
 
 # Make the Python scripts executable
-RUN mv /root/w2b/*.py /root/wiki2bio/
-RUN chmod +x /root/wiki2bio/display_test_metrics.py
-RUN chmod +x /root/wiki2bio/select_best_model.py
+RUN mv /root/templates_to_language_evaluation/w2b/*.py /root/wiki2bio/
+RUN chmod +x /root/wiki2bio/*.py
 
 # Move the main execution BASH scripts to the proper directory and make them executable
-RUN mv /root/w2b/*.sh /root/wiki2bio/
-RUN chmod +x /root/wiki2bio/w2b.sh
+RUN mv /root/templates_to_language_evaluation/w2b/*.sh /root/wiki2bio/
+RUN chmod +x /root/wiki2bio/*.sh
 
 # Create directories for placing the new best models
 RUN mkdir /root/wiki2bio/results/res/model_best_bleu_with_new/
@@ -220,17 +214,14 @@ RUN /root/wiki2bio/w2b.sh -preprocess
 
 
  
-# Remove unecessary datasets
+# Remove unecessary files and folders
 RUN rm -rf /root/Miniconda3-latest-Linux-x86_64.sh
 RUN rm -rf /root/original-datasets/wikipedia-biography-dataset/wikipedia-biography-dataset.z*
 RUN rm -rf /root/neural-template-gen/data/e2e_aligned.tar.gz
 RUN rm -rf /root/neural-template-gen/data/wb_aligned.tar.gz
 RUN rm -rf /root/neural-template-gen/segs.tar.gz
 RUN rm -rf /root/wiki2bio/original_data/original_data.zip
-RUN rm -rf /root/ntg/
-RUN rm -rf /root/e2e/
-RUN rm -rf /root/tgen/
-RUN rm -rf /root/w2b/
+RUN rm -rf /root/templates_to_language_evaluation/
 
 
 

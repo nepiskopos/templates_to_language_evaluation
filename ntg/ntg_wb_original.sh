@@ -10,12 +10,12 @@ source /root/.bashrc
 
 # Check the corectness of the provided command-line arguments
 if [[ $1 != -nar && $1 != -war ]]; then
-    echo 'Usage: ./ntg_wb_original.sh -gen -nar [or -war] [-cuda]'
+    echo 'Usage: ./ntg_wb_original.sh -nar [or -war] [-cuda]'
 
     exit 1
 elif [[ ! -z "$2" ]]; then
     if [[ $2 != -cuda ]]; then
-        echo 'Usage: ./ntg_wb_original.sh -gen -nar [or -war] [-cuda]'
+        echo 'Usage: ./ntg_wb_original.sh -nar [or -war] [-cuda]'
 
         exit 1
     fi

@@ -238,7 +238,7 @@ def gen_ntg(container, data, ar, dec, gpu):
 
 def gen_ntg_original(container, data, ar, gpu):
     print(f"Generating text using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}_original.sh -gen {ar} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}_original.sh {ar} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -330,12 +330,12 @@ if __name__ == "__main__":
         print("Install docker and re-run the UI to proceed")
         sys.exit(1)
     
-    if not image_exists(args.i):
+    if not image_exists(args.image):
         result = False
         while True:
-            answer = input(f"Build {args.i} docker image? (y/n): ")
+            answer = input(f"Build {args.image} docker image? (y/n): ")
             if answer == 'y':
-                result = build_image(args.i, args.p)
+                result = build_image(args.image, args.directory)
                 if result:
                     break
                 else:
@@ -346,12 +346,12 @@ if __name__ == "__main__":
             else:
                 print("Wrong input")
     
-    if not container_exists(args.c):
+    if not container_exists(args.container):
         result = False
         while True:
-            answer = input(f"Create {args.c} container using {args.i} image? (y/n): ")
+            answer = input(f"Create {args.container} container using {args.image} image? (y/n): ")
             if answer == 'y':
-                result = create_container(args.c, args.i)
+                result = create_container(args.container, args.image)
                 if result:
                     break
                 else:
@@ -362,12 +362,12 @@ if __name__ == "__main__":
             else:
                 print("Wrong input")
                 
-    if not container_active(args.c):
+    if not container_active(args.container):
         result = False
         while True:
-            answer = input(f"Activate {args.c} container? (y/n): ")
+            answer = input(f"Activate {args.container} container? (y/n): ")
             if answer == 'y':
-                result = activate_container(args.c)
+                result = activate_container(args.container)
                 if result:
                     break
                 else:
@@ -399,7 +399,7 @@ if __name__ == "__main__":
                     "Choice: "
                     )
             if train == 'T':
-                result = train_tgen(args.c)
+                result = train_tgen(args.container)
             elif train == 'NE':
                 dec = ''
                 ar = '-nar'
@@ -423,7 +423,7 @@ if __name__ == "__main__":
                     ar = '-war'
                 if 'D' in params:
                     dec = '-decay'
-                result = train_ntg(args.c, 'e2e', ar, dec, gpu)
+                result = train_ntg(args.container, 'e2e', ar, dec, gpu)
             elif train == 'NW':
                 dec = ''
                 ar = '-nar'
@@ -447,7 +447,7 @@ if __name__ == "__main__":
                     ar = '-war'
                 if 'D' in params:
                     dec = '-decay'
-                result = train_ntg(args.c, 'wb', ar, dec, gpu)
+                result = train_ntg(args.container, 'wb', ar, dec, gpu)
             elif train == 'W':
                 gpu = ''
                 params = input("Please press [G]PU if would like to make use of your GPU (otherwise CPU is used)\n" +
@@ -455,7 +455,7 @@ if __name__ == "__main__":
                                )
                 if 'G' in params:
                     gpu = '-cuda'
-                result = train_w2b(args.c, gpu)
+                result = train_w2b(args.container, gpu)
             elif train != 'B':
                 print("Wrong input")
         if action == 'G':
@@ -468,7 +468,7 @@ if __name__ == "__main__":
                     "Choice: "
                     )
             if generate == 'T':
-                result = gen_tgen(args.c)
+                result = gen_tgen(args.container)
             elif generate == 'NE':
                 dec = ''
                 ar = '-nar'
@@ -495,9 +495,9 @@ if __name__ == "__main__":
                 if 'D' in params:
                     dec = '-decay'
                 if 'P' in params:
-                    result = gen_ntg_original(args.c, 'e2e', ar, gpu)
+                    result = gen_ntg_original(args.container, 'e2e', ar, gpu)
                 else:
-                    result = gen_ntg(args.c, 'e2e', ar, dec, gpu)
+                    result = gen_ntg(args.container, 'e2e', ar, dec, gpu)
             elif generate == 'NW':
                 dec = ''
                 ar = '-nar'
@@ -524,9 +524,9 @@ if __name__ == "__main__":
                 if 'D' in params:
                     dec = '-decay'
                 if 'P' in params:
-                    result = gen_ntg_original(args.c, 'wb', ar, gpu)
+                    result = gen_ntg_original(args.container, 'wb', ar, gpu)
                 else:
-                    result = gen_ntg(args.c, 'wb', ar, dec, gpu)
+                    result = gen_ntg(args.container, 'wb', ar, dec, gpu)
             elif generate != 'B':
                 print("Wrong input")
         elif action == 'E':
@@ -561,7 +561,7 @@ if __name__ == "__main__":
                         t_format = '\'html\''
                     elif 'P' in formats:
                         t_format = '\'plain\''
-                result = eval_tgen(args.c, t_format)
+                result = eval_tgen(args.container, t_format)
             elif evaluate == 'NE':
                 dec = ''
                 ar = '-nar'
@@ -601,9 +601,9 @@ if __name__ == "__main__":
                     elif 'P' in formats:
                         t_format = '\'plain\''
                 if 'P' in params:
-                    result = eval_ntg_original(args.c, 'e2e', ar, t_format)
+                    result = eval_ntg_original(args.container, 'e2e', ar, t_format)
                 else:
-                    result = eval_ntg(args.c, 'e2e', dec, ar, t_format)
+                    result = eval_ntg(args.container, 'e2e', dec, ar, t_format)
             #elif evaluate == 'NW':
                 #dec = ''
                 #ar = '-nar'
@@ -625,9 +625,9 @@ if __name__ == "__main__":
                 #if 'D' in params:
                     #dec = '-decay'
                 #if 'P' in params:
-                    #result = eval_ntg_original(args.c, 'wb', ar, t_format)
+                    #result = eval_ntg_original(args.container, 'wb', ar, t_format)
                 #else:
-                    #result = eval_ntg(args.c, 'wb', dec, ar, t_format)
+                    #result = eval_ntg(args.container, 'wb', dec, ar, t_format)
             elif evaluate == 'W':
                 gpu = ''
                 model = 'new'
@@ -668,7 +668,7 @@ if __name__ == "__main__":
                         t_format = '\'html\''
                     elif 'P' in formats:
                         t_format = '\'plain\''
-                result = gen_w2b(args.c, model, metric, t_format, gpu)
+                result = gen_w2b(args.container, model, metric, t_format, gpu)
             elif evaluate != 'B':
                 print("Wrong input")
         elif action == 'Q':

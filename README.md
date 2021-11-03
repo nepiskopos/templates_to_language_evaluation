@@ -1,12 +1,10 @@
-# Final project in Database Systems - Templates to Language Evaluation
-## [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
+# Final project in Database Systems
+## Templates to Language Evaluation
 ### Authors: [Dimitrios Roussis](https://github.com/droussis/), [Nikolaos Episkopos](https://github.com/nbishdev/)
-#### Evaluation and comparison between different models for advancing from data templates to natural language sentences formulation.
-
-<br/>
+#### [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
 
 ### Description
-In this project we attempt to evaluate three different models used in Natural Language Generation from structured data and compare their performance on the E2E and WikiBio datasets:
+In this project we attempt to evaluate and compare the 3 following models used in advancing from structured data templates to natural language sentences formulation and compare their performance on the E2E and WikiBio datasets:
 1. [neural-template-gen](https://github.com/harvardnlp/neural-template-gen), written by Wiseman et al. (2018)
 2. [TGen](https://github.com/UFAL-DSG/tgen), written by Dušek and Jurčíček (2016)
 3. [wiki2bio](https://github.com/tyliupku/wiki2bio), written by Liu et al. (2018)
@@ -14,8 +12,6 @@ In this project we attempt to evaluate three different models used in Natural La
 For the evaluation, we have also created a custom Dockerfile, which should be used to build a Docker container to re-run all of our experiments.
 
 To make the whole procedure clearer and more straightforward, we have created a text-based user interface, which will navigate any user through the whole procedure.
-
-<br/>
 
 ### Details
 In addition to the original projects as they were provided by their respective authors, we have performed the following modifications/additions:
@@ -26,16 +22,12 @@ In addition to the original projects as they were provided by their respective a
 - created a Dockerfile, which creates a container and takes care of everything in an straightforward and automatic way
 - created a User Interface that abstracts the complexity of the Docker commands and the Bash scripts
 
-<br/>
-
 ### Contents
 - docker: directory which contains a Dockerfile, as well as some instructions on how to set up and use Docker on a terminal in Ubuntu
 - e2e-metrics: directory which contains Bash and Python scripts that help with evaluating the models on the E2E challenge, using the E2E NLG Challenge Evaluation metrics, i.e. the code that has been developed to automatically evaluate the metrics of any model that is tested on the E2E dataset, as well as the measured scores
 - ntg: directory which contains Bash and Python scripts that help with using the neural-template-gen software, as well as our own re-trained models, segmentations and generations
 - tgen: directory which contains a Bash script that helps with using the TGen software, as well as our own re-trained model, segmentations and outputs
 - wiki2bio: directory which contains Bash and Python scripts that help with using the wiki2bio software, as well as our own re-trained model and outputs
-
-<br/>
 
 ### Guidelines
 1. Install Ubuntu 20.04 (preferably server edition) which can be downloaded from the [official Ubuntu website](https://releases.ubuntu.com/focal/ubuntu-20.04.1-live-server-amd64.iso)

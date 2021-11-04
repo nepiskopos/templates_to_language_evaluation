@@ -77,7 +77,8 @@ docker build -t dbsi:latest -f ./templates_to_language_evaluation/docker/Dockerf
 ```console
 docker run --name dbs -it -v ./templates_to_language_evaluation/:/root/shared/ dbsc
 ```
-### (Optional) with access to host's Nvidia GPU(s) (Nvidia container toolkit must be installed)
+### (Optional) with access to host's Nvidia GPU(s)
+#### Nvidia container toolkit must be installed first
 ```console
 docker run --name dbs --gpus all -it -v ./templates_to_language_evaluation/:/root/shared/ dbsc
 ```

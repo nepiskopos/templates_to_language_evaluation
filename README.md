@@ -1,6 +1,6 @@
 # Final project in Database Systems
 ## Templates to Language Evaluation
-### Authors: [Dimitrios Roussis](https://github.com/droussis/), [Nikolaos Episkopos](https://github.com/nbishdev/)
+### Authors: [Dimitrios Roussis](https://github.com/droussis/), [Nikos Episkopos](https://github.com/nbishdev/)
 #### [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
 
 ### Description

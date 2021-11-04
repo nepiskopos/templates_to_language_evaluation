@@ -2,8 +2,8 @@
 ## Final project in Database Systems course -- academic year 2019-2020
 #### [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
 ### Authors:
-#### * [Dimitrios Roussis](https://github.com/droussis/)
-#### * [Nikos Episkopos](https://github.com/nbishdev/)
+* [Dimitrios Roussis](https://github.com/droussis/)
+* [Nikos Episkopos](https://github.com/nbishdev/)
 
 ---
 

@@ -59,13 +59,13 @@ if [[ $1 == -train ]]; then
     if [[ $2 == -nar ]]; then
         # Train the non-autoregressive model using the WikiBio data
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool \
-        -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed $4 -save /root/neural-template-gen/models/wb-45-3-new.pt
+        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 3 \
+        -mlpinp $decayed $4 -save /root/neural-template-gen/models/wb-45-3-new.pt."$dec"
     elif [[ $2 == -war ]]; then
         # Train the autoregressive model using the WikiBio data
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool \
-        -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed $4 -save /root/neural-template-gen/models/wb-45-3-war-new.pt -ar_after_decay -word_ar
+        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 3 \
+        -mlpinp $decayed $4 -save /root/neural-template-gen/models/wb-45-3-war-new.pt."$dec" -ar_after_decay -word_ar
     fi
 elif [[ $1 == -seg ]]; then
     # Viterbi Segmentation/Template Extraction
@@ -73,13 +73,15 @@ elif [[ $1 == -seg ]]; then
     if [[ $2 == -nar ]]; then
         # Run the segmentation for the non-autoregressive WikiBio model
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 -\
-        log_interval 200 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool \
-        -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed $4 -load /root/neural-template-gen/models/wb-45-3-new.pt.$3 -label_train | tee /root/neural-template-gen/segs/seg-wb-45-3-new-dec"$dec".txt
+        log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 3 \
+        -mlpinp $decayed $4 -load /root/neural-template-gen/models/wb-45-3-new.pt."$dec" -label_train \
+        | tee /root/neural-template-gen/segs/seg-wb-45-3-new-dec"$dec".txt
     elif [[ $2 == -war ]]; then
         # Run the segmentation for the autoregressive WikiBio model
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 200 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool \
-        -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed $4 -load /root/neural-template-gen/models/wb-45-3-war-new.pt.$3 -label_train | tee /root/neural-template-gen/segs/seg-wb-45-3-war-new-dec"$dec".txt
+        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 3 \
+        -mlpinp $decayed $4 -load /root/neural-template-gen/models/wb-45-3-war-new.pt."$dec" -label_train -ar_after_decay -word_ar \
+        | tee /root/neural-template-gen/segs/seg-wb-45-3-war-new-dec"$dec".txt
     fi
 elif [[ $1 == -gen ]]; then
     # Text Generation
@@ -87,17 +89,17 @@ elif [[ $1 == -gen ]]; then
     if [[ $2 == -nar ]]; then
         # Generate on the WikiBio test set using the non-autoregressive model
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool \
-        -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed -gen_from_fi /root/neural-template-gen/data/wb_aligned/src_test.txt \
-        -load /root/neural-template-gen/models/wb-45-3-new.pt.$3 -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
-        $4 -min_gen_tokes 20 > /root/neural-template-gen/gens/gen-wb-45-3-dec"$dec".txt
+        -log_interval 1000 -thresh 29 -lr 0.5 -sep_attn -unif_lenps -emb_drop -mlpinp $decayed -one_rnn -max_pool \
+        -gen_from_fi /root/neural-template-gen/data/wb_aligned/src_test.txt -load /root/neural-template-gen/models/wb-45-3-new.pt."$dec" \
+        -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 20 \
+        -bsz 1 -max_seqlen 55 -Kmul 3 > /root/neural-template-gen/gens/gen-wb-45-3-dec"$dec".txt
     elif [[ $2 == -war ]]; then
         # Generate on the WikiBio test set using the autoregressive model
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool \
-        -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed -gen_from_fi /root/neural-template-gen/data/wb_aligned/src_test.txt \
-        -load /root/neural-template-gen/models/wb-45-3-war-new.pt.$3.pt -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
-        $4 -min_gen_tokes 20 > /root/neural-template-gen/gens/gen-wb-45-3-war-dec"$dec".txt
+        -log_interval 1000 -thresh 29 -lr 0.5 -sep_attn -unif_lenps -emb_drop -mlpinp $decayed -one_rnn -max_pool \
+        -gen_from_fi /root/neural-template-gen/data/wb_aligned/src_test.txt -load /root/neural-template-gen/models/wb-45-3-war-new.pt."$dec" \
+        -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 20 \
+        -bsz 1 -max_seqlen 55 -Kmul 3 > /root/neural-template-gen/gens/gen-wb-45-3-war-dec"$dec".txt
     fi
 fi
 

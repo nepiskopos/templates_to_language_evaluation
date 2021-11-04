@@ -89,17 +89,17 @@ elif [[ $1 == -gen ]]; then
 
     if [[ $2 == -nar ]]; then
         # Generate on the E2E validation set using the non-autoregressive model
-        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -dropout 0.3 -K 55 -L 4 \
-        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 5 -mlpinp $decayed \
+        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 55 -L 4 \
+        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 5 -mlpinp $decayed $4 \
         -gen_from_fi /root/neural-template-gen/data/e2e_aligned/src_uniq_valid.txt -load /root/neural-template-gen/models/e2e-55-5-new.pt."$dec" \
-        -tagged_fi /root/neural-template-gen/segs/seg-e2e-55-5-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 0 \
+        -tagged_fi /root/neural-template-gen/segs/seg-e2e-55-5-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
         > /root/neural-template-gen/gens/gen-e2e-55-5-valid-dec"$dec".txt
 
         # Generate on the E2E test set using the non-autoregressive model
-        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -dropout 0.3 -K 55 -L 4 \
-        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 5 -mlpinp $decayed \
+        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 55 -L 4 \
+        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 5 -mlpinp $decayed $4 \
         -gen_from_fi /root/neural-template-gen/data/e2e_aligned/src_test.txt -load /root/neural-template-gen/models/e2e-55-5-new.pt."$dec" \
-        -tagged_fi /root/neural-template-gen/segs/seg-e2e-55-5-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 0 \
+        -tagged_fi /root/neural-template-gen/segs/seg-e2e-55-5-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
         > /root/neural-template-gen/gens/gen-e2e-55-5-test-dec"$dec".txt
         
         # Postprocess the outputs
@@ -109,17 +109,17 @@ elif [[ $1 == -gen ]]; then
         /root/neural-template-gen/gens_postprocessed/gen-e2e-55-5-test-dec"$dec"-postprocessed.txt
     elif [[ $2 == -war ]]; then
         # Generate on the E2E validation set using the autoregressive model
-        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -dropout 0.3 -K 60 -L 4 \
-        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 1 -mlpinp $decayed \
+        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 60 -L 4 \
+        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 1 -mlpinp $decayed $4 \
         -gen_from_fi /root/neural-template-gen/data/e2e_aligned/src_uniq_valid.txt -load /root/neural-template-gen/models/e2e-60-1-war-new.pt."$dec" \
-        -tagged_fi /root/neural-template-gen/segs/seg-e2e-60-1-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 0 \
+        -tagged_fi /root/neural-template-gen/segs/seg-e2e-60-1-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
         > /root/neural-template-gen/gens/gen-e2e-60-1-war-valid-dec"$dec".txt
 
         # Generate on the E2E test set using the autoregressive model
-        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -dropout 0.3 -K 60 -L 4 \
-        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 1 -mlpinp $decayed \
+        python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 60 -L 4 \
+        -log_interval 200 -thresh 9 -emb_drop -bsz 10 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 1 -mlpinp $decayed $4 \
         -gen_from_fi /root/neural-template-gen/data/e2e_aligned/src_test.txt -load /root/neural-template-gen/models/e2e-60-1-war-new.pt."$dec" \
-        -tagged_fi /root/neural-template-gen/segs/seg-e2e-60-1-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 0 \
+        -tagged_fi /root/neural-template-gen/segs/seg-e2e-60-1-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
         > /root/neural-template-gen/gens/gen-e2e-60-1-war-test-dec"$dec".txt
 
         # Postprocess the outputs

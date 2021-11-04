@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Usage: ./w2b.sh -train [or -test or -preprocess] best [or new (only with test)] 'BLEU' [or 'ROUGE' (only with test new)] ['psql' (or see tabulate docs - only with test)] [-cuda]
+# Usage: ./w2b.sh -train [or -test or -preprocess] [new (only with test)] [or best (only with test)] BLEU [or ROUGE (only with test new)] [psql (or see tabulate docs - only with test)] [-gpu]
 
 
 # Load bashrc
@@ -14,32 +14,32 @@ source /root/miniconda3/etc/profile.d/conda.sh
 
 # Check the corectness of the provided command-line arguments
 if [[ $1 != -preprocess && $1 != -train && $1 != -test ]]; then
-    echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] 'BLEU' [or 'ROUGE' (only with test new)] ['psql' (or see tabulate docs - only with test)] [-cuda]"
+    echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] BLEU [or ROUGE (only with test new)] [psql (or see tabulate docs - only with test)] [-gpu]"
     
     exit 1
 elif [[ $1 == -train ]]; then
     if [ ! -z "$2" ]; then
-        if [[ $2 != -cuda ]]; then
-            echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] 'BLEU' [or 'ROUGE' (only with test new)] ['psql' (or see tabulate docs - only with test)] [-cuda]"
+        if [[ $2 != -gpu ]]; then
+            echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] BLEU [or ROUGE (only with test new)] [psql (or see tabulate docs - only with test)] [-gpu]"
         
             exit 1
         fi
     fi
 elif [[ $1 == -test ]]; then
-    if [[ $2 != old && $2 != new ]]; then
-        echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] 'BLEU' [or 'ROUGE' (only with test new)] ['psql' (or see tabulate docs - only with test)] [-cuda]"
+    if [[ $2 != new && $2 != best ]]; then
+        echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] BLEU [or ROUGE (only with test new)] [psql (or see tabulate docs - only with test)] [-gpu]"
     
         exit 1
     elif [[ $2 == new ]]; then
-        if [[ $3 != 'BLEU' && $3 != 'ROUGE' ]]; then
-            echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] 'BLEU' [or 'ROUGE' (only with test new)] ['psql' (or see tabulate docs - only with test)] [-cuda]"
+        if [[ $3 != BLEU && $3 != ROUGE ]]; then
+            echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] BLEU [or ROUGE (only with test new)] [psql (or see tabulate docs - only with test)] [-gpu]"
         
             exit 1
         fi
     fi
     if [ ! -z "$5" ]; then
-        if [[ $5 != -cuda ]]; then
-            echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] 'BLEU' [or 'ROUGE' (only with test new)] ['psql' (or see tabulate docs - only with test)] [-cuda]"
+        if [[ $5 != -gpu ]]; then
+            echo ".Usage: ./w2b.sh -train [or -test or -preprocess] old [or new (only with test)] BLEU [or ROUGE (only with test new)] [psql (or see tabulate docs - only with test)] [-gpu]"
         
             exit 1
         fi
@@ -47,16 +47,36 @@ elif [[ $1 == -test ]]; then
 fi
 
 
-# If -cuda is provided, activate w2b_gpu environment
+# Check given arguments to extract values
+gpu=''
+if [ ! -z "$2" ]; then
+	if [[ $2 == -gpu ]]; then
+        gpu='-cuda'
+	fi
+elif [ ! -z "$4" ]; then
+	if [[ $4 == -gpu ]]; then
+		gpu='-cuda'
+	fi
+elif [ ! -z "$5" ]; then
+    if [[ $5 == -gpu ]]; then
+		gpu='-cuda'
+	fi
+fi
+
+
+# Activate ntg conda virtual environment
+source /root/miniconda3/etc/profile.d/conda.sh
+
+# If -gpu is provided, activate w2b_gpu environment
 # otherwise, activate w2b_cpu environment
 if [[ $1 == -preprocess ]]; then
     conda activate w2b_cpu
 else
-    if [[ $2 == -cuda || $5 == -cuda ]]; then
+	if [ -z "$gpu" ]; then
+        conda activate w2b_cpu
+    else
         nvidia-smi
         conda activate w2b_gpu
-    else
-        conda activate w2b_cpu
     fi
 fi
 
@@ -91,7 +111,7 @@ elif [[ $1 == -train ]]; then
     # Rename log
     mv /root/wiki2bio/results/res/$ltd/log.txt /root/wiki2bio/results/res/$ltd/log_train.txt
 elif [[ $1 == -test && $2 == best ]]; then
-    if [[ $3 == 'BLEU' ]]; then
+    if [[ $3 == BLEU ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_bleu_with/log_test_old.txt
         rm -rf /root/wiki2bio/results/res/model_best_bleu_with/table_test_old.csv
@@ -112,7 +132,7 @@ elif [[ $1 == -test && $2 == best ]]; then
         else
             python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with/table_test_new.csv -t
         fi
-    elif [[ $3 == 'ROUGE' ]]; then
+    elif [[ $3 == ROUGE ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with/log_test_old.txt
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with/table_test_old.csv
@@ -138,7 +158,7 @@ elif [[ $1 == -test && $2 == new ]]; then
     # Get directory of most recently trained model
     ltd=$(ls -1 /root/wiki2bio/results/res/ | tail -n 1)
     
-    if [[ $3 == 'BLEU' ]]; then
+    if [[ $3 == BLEU ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_old.txt
         rm -rf /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_old.csv
@@ -147,7 +167,7 @@ elif [[ $1 == -test && $2 == new ]]; then
         mv /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_old.txt
         mv /root/wiki2bio/results/res/model_best_bleu_with_new/test_table_new.csv /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_old.csv
         
-        # Select the best model from the re-trained ones based on 'BLEU'
+        # Select the best model from the re-trained ones based on BLEU
         python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log_train.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_bleu_with_new/ -m $3
         
         # Run main for testing user's re-trained model with the best bleu score
@@ -162,7 +182,7 @@ elif [[ $1 == -test && $2 == new ]]; then
         else
             python2 /root/wiki2bio/display_test_metrics.py /root/wiki2bio/results/res/model_best_bleu_with_new/log_test_new.txt -e /root/wiki2bio/results/res/model_best_bleu_with_new/table_test_new.csv -t
         fi
-    elif [[ $3 == 'ROUGE' ]]; then
+    elif [[ $3 == ROUGE ]]; then
         # Delete previous new test log and result table
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_old.txt
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with_new/table_test_old.csv
@@ -171,7 +191,7 @@ elif [[ $1 == -test && $2 == new ]]; then
         mv /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_new.txt /root/wiki2bio/results/res/model_best_rouge_with_new/log_test_old.txt
         mv /root/wiki2bio/results/res/model_best_rouge_with_new/test_table_new.csv /root/wiki2bio/results/res/model_best_rouge_with_new/table_test_old.csv
         
-        # Select the best model from the re-trained ones based on 'ROUGE'
+        # Select the best model from the re-trained ones based on ROUGE
         python2 /root/wiki2bio/select_best_model.py /root/wiki2bio/results/res/$ltd/log_train.txt /root/wiki2bio/results/res/$ltd/ /root/wiki2bio/results/res/model_best_rouge_with_new/ -m $3
         
         # Run main for testing user's re-trained model with the best bleu score

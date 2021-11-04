@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import shlex
 import subprocess
 import sys
@@ -316,7 +317,7 @@ def gen_w2b(container, model, metric, t_format, gpu):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('-i', '--image', type=str, default='dbsi', help='docker image name')
+    parser.add_argument('-i', '--image', type=str, default='bishop/dbsi', help='docker image name')
     parser.add_argument('-c', '--container', type=str, default='dbsc', help='docker container name')
     parser.add_argument('-d', '--directory', type=str, default='./', help='path to project directory')
     
@@ -334,7 +335,7 @@ if __name__ == "__main__":
         while True:
             answer = input(f"Build {args.image} docker image? (y/n): ")
             if answer == 'y':
-                result = build_image(args.image, args.directory)
+                result = build_image(args.image, os.path.dirname(__file__) + '/' + args.directory)
                 if result:
                     break
                 else:
@@ -350,7 +351,7 @@ if __name__ == "__main__":
         while True:
             answer = input(f"Create {args.container} container using {args.image} image? (y/n): ")
             if answer == 'y':
-                result = create_container(args.image, args.container, args.directory)
+                result = create_container(args.image, args.container, os.path.dirname(__file__) + '/' + args.directory)
                 if result:
                     break
                 else:

@@ -18,12 +18,8 @@ elif [[ $2 != -nar && $2 != -war ]]; then
 
     exit 1
 elif [ ! -z "$3" ]; then
-    if [[ $3 != -decay ]]; then
+    if [[ $3 != -decay && $3 != -gpu ]]; then
         echo 'Usage: ./ntg_e2e.sh -train [or -seg] [or -gen] -nar [or -war] [-decay] [-gpu]'
-
-        exit 1
-	elif [[ $3 != -gpu ]]; then
-		echo 'Usage: ./ntg_e2e.sh -train [or -seg] [or -gen] -nar [or -war] [-decay] [-gpu]'
 
         exit 1
     fi

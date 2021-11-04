@@ -154,7 +154,7 @@ def activate_container(container):
 
 def train_tgen(container):
     print(f"Training TGen in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/tgen/tgen.sh -train'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/tgen/tgen.sh -train'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -168,7 +168,7 @@ def train_tgen(container):
 
 def gen_tgen(container):
     print(f"Generating text using TGen in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/tgen/tgen.sh -gen'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/tgen/tgen.sh -gen'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -182,7 +182,7 @@ def gen_tgen(container):
 
 def eval_tgen(container, t_format):
     print(f"Evaluating TGen's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/e2e-metrics/e2e_metrics_tgen.sh {t_format}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/e2e-metrics/e2e_metrics_tgen.sh {t_format}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -196,7 +196,7 @@ def eval_tgen(container, t_format):
 
 def train_ntg(container, data, ar, dec, gpu):
     print(f"Training NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}.sh -train {ar} {dec} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/neural-template-gen/ntg_{data}.sh -train {ar} {dec} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -210,7 +210,7 @@ def train_ntg(container, data, ar, dec, gpu):
 
 def seg_ntg(container, data, ar, dec, gpu):
     print(f"Creating Viterbi segmentations using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}.sh -seg {ar} {dec} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/neural-template-gen/ntg_{data}.sh -seg {ar} {dec} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -224,7 +224,7 @@ def seg_ntg(container, data, ar, dec, gpu):
 
 def gen_ntg(container, data, ar, dec, gpu):
     print(f"Generating text using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}.sh -gen {ar} {dec} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/neural-template-gen/ntg_{data}.sh -gen {ar} {dec} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -238,7 +238,7 @@ def gen_ntg(container, data, ar, dec, gpu):
 
 def gen_ntg_original(container, data, ar, gpu):
     print(f"Generating text using NTG in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/neural-template-gen/ntg_{data}_original.sh {ar} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/neural-template-gen/ntg_{data}_original.sh {ar} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -252,7 +252,7 @@ def gen_ntg_original(container, data, ar, gpu):
 
 def eval_ntg(container, data, ar, dec, t_format):
     print(f"Evaluating NTG's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/"
+    bashCommand = f"docker exec -it {container} bash -c '/root/"
     if data == 'e2e':
         bashCommand = bashCommand + f"e2e-metrics/e2e_metrics_ntg.sh {ar} {dec} {t_format}'"
     else:
@@ -270,7 +270,7 @@ def eval_ntg(container, data, ar, dec, t_format):
 
 def eval_ntg_original(container, data, ar, t_format):
     print(f"Evaluating NTG's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/"
+    bashCommand = f"docker exec -it {container} bash -c '/root/"
     if data == 'e2e':
         bashCommand = bashCommand + f"e2e-metrics/e2e_metrics_ntg_original.sh {ar} {t_format}'"
     else:
@@ -288,7 +288,7 @@ def eval_ntg_original(container, data, ar, t_format):
 
 def train_w2b(container, gpu):
     print(f"Training Wiki2Bio in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/wiki2bio/w2b.sh -train {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/wiki2bio/w2b.sh -train {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -302,7 +302,7 @@ def train_w2b(container, gpu):
 
 def gen_w2b(container, model, metric, t_format, gpu):
     print(f"Evaluating Wiki2Bio's text generation in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/templates_to_language_evaluation/wiki2bio/w2b.sh -test {model} {metric} {t_format} {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/wiki2bio/w2b.sh -test {model} {metric} {t_format} {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode

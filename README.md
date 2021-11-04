@@ -53,7 +53,7 @@ git clone https://github.com/nbishdev/templates_to_language_evaluation.git
 cd ./templates_to_language_evaluation/
 ```
 6. Launch the UI, which will guide you through the rest of the setup, using the command
-```templates_to_language_evaluation
+```console
 python3 ./ui.py
 ```
 7. Follow the instructions presented in the UI, to build a Docker image and a Docker container, then execute the whole project through the container

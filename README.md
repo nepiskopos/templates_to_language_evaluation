@@ -1,5 +1,5 @@
 # Templates to Language Evaluation
-## Final project in Database Systems course at [DSIT @ UoA](http://dsit.di.uoa.gr/) - academic year 2019 - 2020
+## Final project in Database Systems course -- academic year 2019-2020
 ### Authors: [Dimitrios Roussis](https://github.com/droussis/), [Nikos Episkopos](https://github.com/nbishdev/)
 #### [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
 

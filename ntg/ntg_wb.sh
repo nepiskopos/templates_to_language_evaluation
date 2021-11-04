@@ -89,17 +89,17 @@ elif [[ $1 == -gen ]]; then
     if [[ $2 == -nar ]]; then
         # Generate on the WikiBio test set using the non-autoregressive model
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 1000 -thresh 29 -lr 0.5 -sep_attn -unif_lenps -emb_drop -mlpinp $decayed -one_rnn -max_pool \
+        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed $4 \
         -gen_from_fi /root/neural-template-gen/data/wb_aligned/src_test.txt -load /root/neural-template-gen/models/wb-45-3-new.pt."$dec" \
-        -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 20 \
-        -bsz 1 -max_seqlen 55 -Kmul 3 > /root/neural-template-gen/gens/gen-wb-45-3-dec"$dec".txt
+        -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' -min_gen_tokes 20 \
+        > /root/neural-template-gen/gens/gen-wb-45-3-dec"$dec".txt
     elif [[ $2 == -war ]]; then
         # Generate on the WikiBio test set using the autoregressive model
         python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/wb_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 45 -L 4 \
-        -log_interval 1000 -thresh 29 -lr 0.5 -sep_attn -unif_lenps -emb_drop -mlpinp $decayed -one_rnn -max_pool \
+        -log_interval 1000 -thresh 29 -emb_drop -bsz 1 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 3 -mlpinp $decayed $4 \
         -gen_from_fi /root/neural-template-gen/data/wb_aligned/src_test.txt -load /root/neural-template-gen/models/wb-45-3-war-new.pt."$dec" \
-        -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' $4 -min_gen_tokes 20 \
-        -bsz 1 -max_seqlen 55 -Kmul 3 > /root/neural-template-gen/gens/gen-wb-45-3-war-dec"$dec".txt
+        -tagged_fi /root/neural-template-gen/segs/seg-wb-45-3-war-new-dec"$dec".txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' -min_gen_tokes 20 \
+        > /root/neural-template-gen/gens/gen-wb-45-3-war-dec"$dec".txt
     fi
 fi
 

@@ -61,7 +61,7 @@ RUN /root/miniconda3/condabin/conda create --name ntg_gpu python=2.7 regex pytor
 RUN /root/miniconda3/condabin/conda create --name ntg_cpu -c conda-forge python=2.7 regex pytorch-cpu=1.0 -y
 
 # Fetch code
-RUN git clone https://github.com/nbishdev/neural-template-gen
+RUN git clone https://github.com/nbishdev/neural-template-gen.git
 
 # Extract the pre-processed E2E dataset
 RUN tar -xvf /root/neural-template-gen/data/e2e_aligned.tar.gz -C /root/neural-template-gen/data/
@@ -116,7 +116,7 @@ RUN /root/miniconda3/condabin/conda create --name e2e_metrics python=3.6 openjdk
 RUN cpanm XML::Twig
 
 # Fetch code
-RUN git clone https://github.com/tuetschek/e2e-metrics
+RUN git clone https://github.com/tuetschek/e2e-metrics.git
 
 # Extract the output scores
 RUN mkdir /root/e2e-metrics/output_scores/
@@ -139,7 +139,7 @@ RUN /root/miniconda3/condabin/conda create --name tgen python=3.6 tensorflow=1.1
 RUN /root/miniconda3/condabin/conda install -c conda-forge --name tgen pudb -y
 
 # Fetch code
-RUN git clone https://github.com/UFAL-DSG/tgen
+RUN git clone https://github.com/UFAL-DSG/tgen.git
 
 # Install all requirements
 RUN /root/miniconda3/envs/tgen/bin/pip3 install -r /root/tgen/requirements.txt
@@ -179,7 +179,7 @@ RUN /root/miniconda3/condabin/conda create --name w2b_cpu python=2.7 tensorflow=
 RUN cpanm XML::DOM DB_File
 
 # Fetch code
-RUN git clone https://github.com/nbishdev/wiki2bio
+RUN git clone https://github.com/nbishdev/wiki2bio.git
 
 # Download original dataset
 RUN /root/miniconda3/bin/gdown --id 15AV8LeWY3nzCKb8RRbM8kwHAp_DUZ5gf -O /root/wiki2bio/original_data/

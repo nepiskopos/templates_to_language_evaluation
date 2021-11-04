@@ -418,7 +418,7 @@ if __name__ == "__main__":
                         "Choice: "
                         )
                 if 'G' in params:
-                    gpu = '-cuda'
+                    gpu = '-gpu'
                 if 'A' in params:
                     ar = '-war'
                 if 'D' in params:
@@ -442,7 +442,7 @@ if __name__ == "__main__":
                         "Choice: "
                         )
                 if 'G' in params:
-                    gpu = '-cuda'
+                    gpu = '-gpu'
                 if 'A' in params:
                     ar = '-war'
                 if 'D' in params:
@@ -454,7 +454,7 @@ if __name__ == "__main__":
                                "Choice: "
                                )
                 if 'G' in params:
-                    gpu = '-cuda'
+                    gpu = '-gpu'
                 result = train_w2b(args.container, gpu)
             elif train != 'B':
                 print("Wrong input")
@@ -489,7 +489,7 @@ if __name__ == "__main__":
                         "Choice: "
                         )
                 if 'G' in params:
-                    gpu = '-cuda'
+                    gpu = '-gpu'
                 if 'A' in params:
                     ar = '-war'
                 if 'D' in params:
@@ -518,7 +518,7 @@ if __name__ == "__main__":
                         "Choice: "
                         )
                 if 'G' in params:
-                    gpu = '-cuda'
+                    gpu = '-gpu'
                 if 'A' in params:
                     ar = '-war'
                 if 'D' in params:
@@ -648,7 +648,7 @@ if __name__ == "__main__":
                                "Choice: "
                                )
                 if 'G' in params:
-                    gpu = '-cuda'
+                    gpu = '-gpu'
                 if 'P' in params:
                     model = 'old'
                 if 'R' in params:

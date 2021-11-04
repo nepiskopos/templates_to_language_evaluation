@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import argparse
 import shlex
 import subprocess
@@ -40,7 +39,7 @@ def image_exists(name):
 
 def build_image(name, path):
     print(f"Building {name} docker image using the Dockerfile...")
-    bashCommand = f"docker build -t {name} -f {path}/docker/Dockerfile {path}"
+    bashCommand = f"docker build -t {name}:latest -f {path}/docker/Dockerfile {path}"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -97,7 +96,7 @@ def container_exists(name):
         print(f"{name} docker container does not exist")
     return result
 
-def create_container(container, image):
+def create_container(image, container, path):
     bashCommand = f"docker create --name {container} "
     print(f"Creating {container} using {image} image...")
     if nvidia_gpu():
@@ -106,7 +105,7 @@ def create_container(container, image):
         else:
             bashCommand = bashCommand + f"--device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidia1:/dev/nvida1 --device /dev/nvidiactl:/dev/nvidiactl --device /dev/nvidia-uvm:/dev/nvidia-uvm "
     else:
-        bashCommand = bashCommand + f"-it {image}"
+        bashCommand = bashCommand + f"-it -v {path}:/root/shared/ {image}"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -351,7 +350,7 @@ if __name__ == "__main__":
         while True:
             answer = input(f"Create {args.container} container using {args.image} image? (y/n): ")
             if answer == 'y':
-                result = create_container(args.container, args.image)
+                result = create_container(args.image, args.container, args.directory)
                 if result:
                     break
                 else:

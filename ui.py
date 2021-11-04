@@ -317,8 +317,8 @@ def gen_w2b(container, model, metric, t_format, gpu):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('-c', '--container', type=str, default='dbs', help='docker container name')
-    parser.add_argument('-i', '--image', type=str, default='bishop/dbs', help='docker image name')
+    parser.add_argument('-i', '--image', type=str, default='dbsi', help='docker image name')
+    parser.add_argument('-c', '--container', type=str, default='dbsc', help='docker container name')
     parser.add_argument('-d', '--directory', type=str, default='./', help='path to project directory')
     
     print("Welcome to Nikos' and Dimitris' awesome DBS project")

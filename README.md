@@ -1,5 +1,5 @@
-# Final project in Database Systems
-## Templates to Language Evaluation
+# Templates to Language Evaluation
+## Final project in Database Systems
 ### Authors: [Dimitrios Roussis](https://github.com/droussis/), [Nikos Episkopos](https://github.com/nbishdev/)
 #### [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
 

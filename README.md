@@ -6,7 +6,7 @@
 ---
 
 ### Description
-In this project we attempt to evaluate and compare the 3 following models used in advancing from structured data templates to natural language sentences formulation and compare their performance on the E2E and WikiBio datasets:
+In this project we attempt to evaluate and compare the 3 following models used in advancing from structured data templates to natural language sentences formulation and compare their performance on the [E2E](https://github.com/tuetschek/e2e-dataset) and [WikiBio](https://github.com/DavidGrangier/wikipedia-biography-dataset) datasets:
 1. [neural-template-gen](https://github.com/harvardnlp/neural-template-gen), written by Wiseman et al. (2018)
 2. [TGen](https://github.com/UFAL-DSG/tgen), written by Dušek and Jurčíček (2016)
 3. [wiki2bio](https://github.com/tyliupku/wiki2bio), written by Liu et al. (2018)

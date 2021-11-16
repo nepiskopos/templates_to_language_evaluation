@@ -69,14 +69,14 @@ elif [[ $1 == -war ]]; then
     -log_interval 200 -thresh 9 -emb_drop -bsz 15 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 1 -mlpinp -onmt_decay $gpu \
     -gen_from_fi /root/neural-template-gen/data/e2e_aligned/src_uniq_valid.txt -load /root/neural-template-gen/models/original_models/e2e-60-1-war.pt \
     -tagged_fi /root/neural-template-gen/segs/original_segs/seg-e2e-60-1-war.txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
-    > /root/neural-template-gen/original_gens/gens/gen-e2e-60-1-war-valid.txt
+    > /root/neural-template-gen/gens/original_gens/gen-e2e-60-1-war-valid.txt
 
     # Generate on the E2E test set using the autoregressive model
     python2 /root/neural-template-gen/chsmm.py -data /root/neural-template-gen/data/e2e_aligned/ -emb_size 300 -hid_size 300 -layers 1 -K 60 -L 4 \
     -log_interval 200 -thresh 9 -emb_drop -bsz 15 -max_seqlen 55 -lr 0.5 -sep_attn -max_pool -unif_lenps -one_rnn -Kmul 1 -mlpinp -onmt_decay $gpu \
     -gen_from_fi /root/neural-template-gen/data/e2e_aligned/src_test.txt -load /root/neural-template-gen/models/original_models/e2e-60-1-war.pt \
     -tagged_fi /root/neural-template-gen/segs/original_segs/seg-e2e-60-1-war.txt -beamsz 5 -ntemplates 100 -gen_wts '1,1' \
-    > /root/neural-template-gen/original_gens/gens/gen-e2e-60-1-war-test.txt
+    > /root/neural-template-gen/gens/original_gens/gen-e2e-60-1-war-test.txt
 
     # Postprocess the outputs
     python2 /root/neural-template-gen/gens/postprocess_gens_e2e.py /root/neural-template-gen/gens/original_gens/gen-e2e-60-1-war-valid.txt \

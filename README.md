@@ -35,7 +35,7 @@ In addition to the original projects as they were provided by their respective a
 - e2e-metrics: directory which contains Bash and Python scripts that help with evaluating the models on the E2E challenge, using the E2E NLG Challenge Evaluation metrics, i.e. the code that has been developed to automatically evaluate the metrics of any model that is tested on the E2E dataset, as well as the measured scores
 - ntg: directory which contains Bash and Python scripts that help with using the neural-template-gen software, as well as our own re-trained models, segmentations and generations
 - tgen: directory which contains a Bash script that helps with using the TGen software, as well as our own re-trained model, segmentations and outputs
-- wiki2bio: directory which contains Bash and Python scripts that help with using the wiki2bio software, as well as our own re-trained model and outputs
+- w2b: directory which contains Bash and Python scripts that help with using the wiki2bio software, as well as our own re-trained model and outputs
 
 ---
 

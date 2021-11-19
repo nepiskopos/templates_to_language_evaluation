@@ -40,7 +40,7 @@ In addition to the original projects as they were provided by their respective a
 ---
 
 ### Guidelines
-1. Install Ubuntu 20.04 (preferably server edition) which can be downloaded from the [official Ubuntu website](https://releases.ubuntu.com/focal/ubuntu-20.04.1-live-server-amd64.iso)
+1. Install Ubuntu 20.04 (preferably server edition) which can be downloaded from the [official Ubuntu website](https://releases.ubuntu.com/focal/)
 2. Install Git and Python version 3
 ```console
 sudo apt-get -y install git python3

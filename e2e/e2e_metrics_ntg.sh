@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Usage: ./e2e_metrics_ntg.sh -nar [or -war] [-decay] ['psql' (or see tabulate docs)]
+# Usage: ./e2e_metrics_ntg.sh -nar [or -war] [-decay] [psql (or see tabulate docs)]
 
 
 # Load bashrc
@@ -10,12 +10,12 @@ source /root/.bashrc
 
 # Check the corectness of the provided command-line arguments
 if [[ $1 != -nar && $1 != -war ]]; then
-    echo "Usage: ./e2e_metrics_ntg.sh -nar [or -war] [-decay] ['psql' (or see tabulate docs)]"
+    echo "Usage: ./e2e_metrics_ntg.sh -nar [or -war] [-decay] [psql (or see tabulate docs)]"
     
     exit 1
 elif [ ! -z "$2" ]; then
     if [[ $2 != -decay ]]; then
-        echo "Usage: ./e2e_metrics_ntg.sh -nar [or -war] [-decay] ['psql' (or see tabulate docs)]"
+        echo "Usage: ./e2e_metrics_ntg.sh -nar [or -war] [-decay] [psql (or see tabulate docs)]"
         
         exit 1
     fi

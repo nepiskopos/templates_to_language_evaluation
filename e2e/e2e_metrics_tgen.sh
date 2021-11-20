@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-# Usage: ./e2e_metrics_tgen.sh ['psql' (or see tabulate docs)]
+# Usage: ./e2e_metrics_tgen.sh [psql (or see tabulate docs)]
 
 
 # Load bashrc

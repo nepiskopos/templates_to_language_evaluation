@@ -54,7 +54,7 @@ def format_metrics(metrics):
     return metrics
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
     description='Display the average metrics and their corresponding ' \
                 'standard deviation for the E2E challenge dataset'

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Postprocessing for the E2E challenge
+Postprocessing NTG output / generated text for the E2E challenge
 """
 
 from __future__ import unicode_literals
@@ -63,17 +63,12 @@ def process_file(input_file_name, output_file_name):
     with codecs.open(output_file_name, 'wb', 'UTF-8') as fh:
         for line in buf:
             fh.write(detok.detokenize(line) + "\n")       
-    
-
-def main():
-
-    ap = ArgumentParser(description='Postprocess TGen files for E2E challenge')
-    ap.add_argument('input_file', type=str, help='input file (and output file, if in-place)')
-    ap.add_argument('output_file', type=str, nargs='?', help='output file (if not in-place)')
-    args = ap.parse_args()
-
-    process_file(args.input_file, args.output_file if args.output_file else args.input_file)
 
 
 if __name__ == '__main__':
-    main()
+    parser = ArgumentParser(description='Post-process NTG files for E2E challenge')
+    parser.add_argument('input_file', type=str, help='input file (and output file, if in-place)')
+    parser.add_argument('output_file', type=str, nargs='?', help='output file (if not in-place)')
+    args = parser.parse_args()
+
+    process_file(args.input_file, args.output_file if args.output_file else args.input_file)

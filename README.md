@@ -22,10 +22,10 @@ To make the whole procedure clearer and more straightforward, we have created a 
 ### Details
 In addition to the original projects as they were provided by their respective authors, we have performed the following modifications/additions:
 - several bug fixes in all of the 3 software projects
-- ported code to newer versions of toolkits (PyTorch and TensorFlow)
-- created custom Bash scripts to group together several commands that are sometimes needed for a single operation
-- created custom Python scripts for post-processing outputs as well as comparing and evaluating the models
-- created a Dockerfile, which creates a container and takes care of everything in an straightforward and automatic way
+- ported code to newer versions of toolkits (PyTorch 1.0 and TensorFlow 1.15)
+- created custom Bash scripts to group together several commands that are needed for a single operation
+- created custom Python scripts for post-processing outputs as well as evaluating the models
+- created a Dockerfile, which creates an all-in-one image and takes care of everything in an straightforward and automatic way
 - created a User Interface that abstracts the complexity of the Docker commands and the Bash scripts
 
 ---
@@ -54,7 +54,7 @@ git clone https://github.com/nbishdev/templates_to_language_evaluation.git
 ```console
 cd ./templates_to_language_evaluation/
 ```
-6. Launch the UI, which will guide you through the rest of the setup, using the command
+6. Launch the UI, which will guide you through the rest of the setup
 ```console
 python3 ./ui.py
 ```

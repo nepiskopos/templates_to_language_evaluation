@@ -18,7 +18,7 @@ AUTOREGRESSION
         -war: Evaluate the autoregressive model
 
 TABULATE_FORMAT
-    Optional argument, which can take any string value that is acceptable by [tabulate](https://pypi.org/project/tabulate/).
+    Optional argument, which can take any string value that is acceptable by python-tabulate.
         Default: psql
 ```
 
@@ -41,7 +41,7 @@ DECAY
 
 
 TABULATE_FORMAT
-    Optional argument, which can take any string value that is acceptable by [tabulate](https://pypi.org/project/tabulate/).
+    Optional argument, which can take any string value that is acceptable by python-tabulate.
         Default: psql
 ```
 
@@ -53,6 +53,6 @@ Evaluation of a custom re-trained TGen model:
 Arguments:
 
 TABULATE_FORMAT
-    Optional argument, which can take any string value that is acceptable by [tabulate](https://pypi.org/project/tabulate/).
+    Optional argument, which can take any string value that is acceptable by python-tabulate.
         Default: psql
 ```

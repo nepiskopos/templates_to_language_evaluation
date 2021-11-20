@@ -110,7 +110,7 @@ RUN chmod +x /root/neural-template-gen/*.sh
 # Setup E2E NLG Challenge Evaluation metrics
 
 # Setup a conda environment
-RUN /root/miniconda3/condabin/conda create --name e2e_metrics python=3.6 openjdk=8.0 matplotlib scikit-image future pandas tabulate -y
+RUN /root/miniconda3/condabin/conda create --name e2e python=3.6 openjdk=8.0 matplotlib scikit-image future pandas tabulate -y
 
 # Install the necessary Perl modules for ROUGE
 RUN cpanm XML::Twig

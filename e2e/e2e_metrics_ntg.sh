@@ -24,7 +24,7 @@ fi
 
 # Activate w2b conda virtual environment
 source /root/miniconda3/etc/profile.d/conda.sh
-conda activate e2e_metrics
+conda activate e2e
 
 # If decay option chosen
 dec=0
@@ -101,7 +101,7 @@ elif [[ $1 == -war ]]; then
 fi
 
 
-# Deactivate e2e_metrics conda virtual environment
+# Deactivate e2e conda virtual environment
 conda deactivate
 
 

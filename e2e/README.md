@@ -11,8 +11,8 @@ The basic script which performs the evaluation and is called from every Bash scr
 ```console
 usage: display_scores.py [-h] [-e OUTPUT_PATH] [-t] [-f TABLE_FORMAT] tsv_path
 
-Display the average metrics and their correspondingstandard deviation of for
-the E2E challenge
+Display the average metrics and their corresponding standard deviation for the
+E2E challenge dataset.
 
 positional arguments:
   tsv_path              Directory path of the input tsv file

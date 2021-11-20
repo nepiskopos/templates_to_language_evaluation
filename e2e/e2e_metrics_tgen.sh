@@ -10,7 +10,7 @@ source /root/.bashrc
 
 # Activate w2b conda virtual environment
 source /root/miniconda3/etc/profile.d/conda.sh
-conda activate e2e_metrics
+conda activate e2e
 
 
 # Evaluate TGen outputs on validation set
@@ -41,7 +41,7 @@ else
     -e /root/e2e-metrics/output_scores/mean_stdev_scores/tgen_test_scores_final.csv -t
 fi
 
-# Deactivate e2e_metrics conda virtual environment
+# Deactivate e2e conda virtual environment
 conda deactivate
 
 

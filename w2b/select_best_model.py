@@ -104,10 +104,10 @@ def select_best_model(train_log_path, model_path, save_path,
     output, error = process.communicate()
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Display the average metrics and their corresponding' \
-                    'standard deviation of for the E2E challenge'
+        description='Display the average metrics and their corresponding ' \
+                    'standard deviation for the WikiBio dataset'
     )
     
     parser.add_argument('train_log_path', type=str, action='store',

@@ -72,9 +72,9 @@ def display_test_metrics(test_log_path, output_path='', table=True, table_format
         print(display.round(3).to_string())
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-    description='Display the BLEU-4 and ROUGE-4 with and without copy' \
+    description='Display the BLEU-4 and ROUGE-4 with and without copy ' \
                 'for the model by Liu et al. (2017) on the WikiBio test set'
     )
     

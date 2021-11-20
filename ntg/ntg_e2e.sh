@@ -37,14 +37,14 @@ decay=''
 dec=0
 gpu=''
 if [ ! -z "$3" ]; then
-	if [[ $3 == -decay ]]; then
+    if [[ $3 == -decay ]]; then
         decay='-onmt_decay'
-		dec=1
-		if [ ! -z "$4" ]; then
-			gpu='-cuda'
-		fi
-	else
-		gpu='-cuda'
+        dec=1
+        if [ ! -z "$4" ]; then
+            gpu='-cuda'
+        fi
+    else
+        gpu='-cuda'
     fi
 fi
 

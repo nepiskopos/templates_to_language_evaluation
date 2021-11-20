@@ -25,7 +25,7 @@ fi
 # Check given arguments to extract values
 gpu=''
 if [ ! -z "$2" ]; then
-	gpu='-cuda'
+    gpu='-cuda'
 fi
 
 

@@ -50,17 +50,17 @@ fi
 # Check given arguments to extract values
 gpu=''
 if [ ! -z "$2" ]; then
-	if [[ $2 == -gpu ]]; then
+    if [[ $2 == -gpu ]]; then
         gpu='-cuda'
-	fi
+    fi
 elif [ ! -z "$4" ]; then
-	if [[ $4 == -gpu ]]; then
-		gpu='-cuda'
-	fi
+    if [[ $4 == -gpu ]]; then
+        gpu='-cuda'
+    fi
 elif [ ! -z "$5" ]; then
     if [[ $5 == -gpu ]]; then
-		gpu='-cuda'
-	fi
+        gpu='-cuda'
+    fi
 fi
 
 
@@ -72,7 +72,7 @@ source /root/miniconda3/etc/profile.d/conda.sh
 if [[ $1 == -preprocess ]]; then
     conda activate w2b_cpu
 else
-	if [ -z "$gpu" ]; then
+    if [ -z "$gpu" ]; then
         conda activate w2b_cpu
     else
         nvidia-smi

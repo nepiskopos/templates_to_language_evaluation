@@ -56,8 +56,8 @@ def format_metrics(metrics):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(
-    description='Display the average metrics and their corresponding' \
-                'standard deviation of for the E2E challenge'
+    description='Display the average metrics and their corresponding ' \
+                'standard deviation for the E2E challenge dataset'
     )
 
     parser.add_argument('tsv_path', type=str, action='store',

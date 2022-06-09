@@ -10,7 +10,7 @@
 ### Description
 In this project we attempt to evaluate and compare the 3 following models used in advancing from structured data templates to natural language sentences formulation and compare their performance on the [E2E](https://github.com/tuetschek/e2e-dataset) and [WikiBio](https://github.com/DavidGrangier/wikipedia-biography-dataset) datasets:
 1. [neural-template-gen](https://github.com/nbishdev/neural-template-gen), written by Wiseman et al. (2018) (we used our own fork of this software)
-2. [TGen](https://github.com/nbishdev/tgen), written by Dušek and Jurčíček (2016) (we used our own fork of this software but now our changes have been upstreamed)
+2. [TGen](https://github.com/nbishdev/tgen), written by Dušek and Jurčíček (2016) (we used our own fork of this software but now all of our changes have been upstreamed to the original project)
 3. [wiki2bio](https://github.com/nbishdev/wiki2bio), written by Liu et al. (2018) (we used our own fork of this software)
 
 For the evaluation, we have also created a custom Dockerfile, which should be used to build a Docker container to re-run all of our experiments.

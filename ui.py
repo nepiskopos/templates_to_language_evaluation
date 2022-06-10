@@ -319,7 +319,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('-i', '--image', type=str, default='bishop/dbsi', help='docker image name')
     parser.add_argument('-c', '--container', type=str, default='dbsc', help='docker container name')
-    parser.add_argument('-d', '--directory', type=str, default='./', help='path to project directory')
+    parser.add_argument('-d', '--directory', type=str, default='.', help='path to project directory')
     
     print("Welcome to Nikos' and Dimitris' awesome DBS project")
     print("Checking if your environment is properly configured...")
@@ -335,7 +335,11 @@ if __name__ == "__main__":
         while True:
             answer = input(f"Build {args.image} docker image? (y/n): ")
             if answer == 'y':
-                result = build_image(args.image, os.path.dirname(__file__) + '/' + args.directory)
+                if not os.path.isabs(args.directory):
+                    source_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), args.directory))
+                else:
+                    source_dir = args.directory
+                result = build_image(args.image, source_dir)
                 if result:
                     break
                 else:
@@ -351,7 +355,11 @@ if __name__ == "__main__":
         while True:
             answer = input(f"Create {args.container} container using {args.image} image? (y/n): ")
             if answer == 'y':
-                result = create_container(args.image, args.container, os.path.dirname(__file__) + '/' + args.directory)
+                if not os.path.isabs(args.directory):
+                    source_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), args.directory))
+                else:
+                    source_dir = args.directory
+                result = create_container(args.image, args.container, source_dir)
                 if result:
                     break
                 else:

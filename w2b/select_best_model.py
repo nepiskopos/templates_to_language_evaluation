@@ -3,13 +3,15 @@
 
 import argparse
 import pandas as pd
-import subprocess
+import os
 import re
+import subprocess
+import sys
 
 
-def select_best_model(train_log_path, model_path, save_path,
+def select_best_model(log_path, model_path, save_path,
                       metric='BLEU', no_copy=False):
-    
+
     # No matter how many epochs does the user let the model be trained,
     # this script will only look at the first 100 epochs (or less than that)
     epochs = range(1, 101)
@@ -21,7 +23,7 @@ def select_best_model(train_log_path, model_path, save_path,
                                ])
     
     # Store log in a buffer
-    with open(train_log_path) as text:
+    with open(log_path) as text:
         lines = text.readlines()
     
     idx = 0
@@ -61,45 +63,45 @@ def select_best_model(train_log_path, model_path, save_path,
     # Find total time of execution for WikiBio in hours
     exec_time = df.time_mins.sum() / 60
     
-    try:
-        if metric == 'BLEU':
-            if no_copy:
-                # Find epoch with max BLEU score and its value
-                epoch_best = df.BLEU_no_copy.idxmax()
-                metric_best = df.BLEU_no_copy.max()
-            else:
-                # Find epoch with max BLEU (with copy) score and its value
-                epoch_best = df.BLEU_copy.idxmax()
-                metric_best = df.BLEU_copy.max()
-        elif metric == 'ROUGE':
-            if no_copy:
-                # Find epoch with max BLEU score and its value
-                epoch_best = df.ROUGE4_F_no_copy.idxmax()
-                metric_best = df.ROUGE4_F_no_copy.max()
-            else:
-                # Find epoch with max BLEU score and its value
-                epoch_best = df.ROUGE4_F_copy.idxmax()
-                metric_best = df.ROUGE4_F_copy.max()
-    except:
-        print 'Please choose a valid metric: "BLEU" or "ROUGE".'
+    if metric == 'BLEU':
+        if no_copy:
+            # Find epoch with max BLEU score and its value
+            epoch_best = df.BLEU_no_copy.idxmax()
+            metric_best = df.BLEU_no_copy.max()
+        else:
+            # Find epoch with max BLEU (with copy) score and its value
+            epoch_best = df.BLEU_copy.idxmax()
+            metric_best = df.BLEU_copy.max()
     else:
-        print '''The training process took {:0.2f} hours and the 
-                 best model based on {} is that of epoch {} 
-                 with a value of {:0.4f}.''' \
-                 .format(exec_time, metric, epoch_best, metric_best)
-    
-    # Copy log to the path used by the testing process
-    bash_command = 'cp -r {} {}'.format(train_log_path, save_path)
-    
-    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
+        if no_copy:
+            # Find epoch with max BLEU score and its value
+            epoch_best = df.ROUGE4_F_no_copy.idxmax()
+            metric_best = df.ROUGE4_F_no_copy.max()
+        else:
+            # Find epoch with max BLEU score and its value
+            epoch_best = df.ROUGE4_F_copy.idxmax()
+            metric_best = df.ROUGE4_F_copy.max()
+
+    print '''The training process took {:0.2f} hours and the
+             best model based on {} is that of epoch {}
+             with a value of {:0.4f}.
+          '''.format(exec_time, metric, epoch_best, metric_best)
     
     # Get the path of the epoch with the best metric
-    best_model_path = model_path + '/loads/' + str(epoch_best)
+    best_model_path = os.path.join(model_path, 'loads/' + str(epoch_best))
     
-    # Copy best model to the path used by the testing process
-    bash_command = 'cp -r {}/. {}'.format(best_model_path, save_path)
-    
+    # Create a save directory for the best model
+    # bash_command = 'mkdir -p {}'.format(save_path)
+    # process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    # output, error = process.communicate()
+
+    # Copy log to the path used by the testing process
+    # bash_command = 'cp -r {} {}'.format(log_path, save_path)
+    # process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    # output, error = process.communicate()
+
+    # Copy the best model to the path used by the testing process
+    bash_command = 'cp -R {} {}'.format(best_model_path, save_path)
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
 
@@ -110,21 +112,34 @@ if __name__ == '__main__':
                     'standard deviation for the WikiBio dataset'
     )
     
-    parser.add_argument('train_log_path', type=str, action='store',
-                        help='Directory path of the input train log file')
-    parser.add_argument('model_path', type=str, action='store',
-                        help='Directory path of the re-trained model.')
-    parser.add_argument('save_path', type=str, action='store',
-                        help='Directory path to save the best model.')
-    parser.add_argument('-m', '--metric', type=str, default='BLEU',
-                        help='Defaults to "BLEU". The metric that will be ' +
-                        'used to determine the best epoch of the model. Choose ' +
-                        'between "BLEU" and "ROUGE".')
-    parser.add_argument('-no_copy', action='store_true', default=False,
+    parser.add_argument('-l', '--log', type=str, action='store', required=True,
+                        help='Path to the train log file')
+    parser.add_argument('--model', type=str, action='store', required=True,
+                        help='Path to the directory which contains loads of the re-trained model.')
+    parser.add_argument('--output', type=str, action='store', required=True,
+                        help='Path to the directory in which the best model will be saved.')
+    parser.add_argument('-m', '--metric', type=str, choices=['BLEU', 'ROUGE'],
+                        default='BLEU', help='The metric that will be used to ' +
+                        'determine the best epoch of the model. Choose between ' +
+                        'BLEU and ROUGE. Defaults to BLEU.')
+    parser.add_argument('--no_copy', action='store_true', default=False,
                         help='If used, the BLEU or ROUGE without copy will ' +
                         'be used to determine the best epoch. Defaults to "False"')
     args = parser.parse_args()
-    
-    
-    select_best_model(args.train_log_path, args.model_path, 
-                      args.save_path, args.metric, args.no_copy)
+
+
+    log = args.log
+    model = args.model
+    output = args.output
+
+    if not os.path.isabs(log):
+        log = os.path.join(os.path.dirname(os.path.realpath(__file__)), log)
+    if not os.path.isabs(model):
+        model = os.path.join(os.path.dirname(os.path.realpath(__file__)), model)
+    if not os.path.isabs(output):
+        output = os.path.join(os.path.dirname(os.path.realpath(__file__)), output)
+
+    select_best_model(log, model, output, args.metric, args.no_copy)
+
+
+    sys.exit(0)

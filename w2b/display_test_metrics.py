@@ -3,10 +3,11 @@
 import argparse
 import pandas as pd
 import re
+import sys
 from tabulate import tabulate
 
 
-def display_test_metrics(test_log_path, output_path='', table=True, table_format='psql'):
+def display_test_metrics(test_log_path, output_path=None, table=True, table_format='psql'):
     """
     Display the BLEU-4 and the F-Measure of the ROUGE-4
     for the input test log file given by the user, which is
@@ -63,7 +64,7 @@ def display_test_metrics(test_log_path, output_path='', table=True, table_format
     display['ROUGE-4'].iloc[1] = ROUGE4_F_no_copy * 100
     
     # Optionally, export display DataFrame as a csv file to the output path
-    if output_path != '':
+    if output_path:
         display.to_csv(output_path, sep='\t')
                        
     if table:
@@ -78,22 +79,23 @@ if __name__ == '__main__':
                 'for the model by Liu et al. (2017) on the WikiBio test set'
     )
     
-    parser.add_argument('test_log_path', type=str, action='store',
-                        help='Directory path of the input test log file')
-    parser.add_argument('-e', '--export', type=str, action='store', 
-                        dest='output_path', default='',
+    parser.add_argument('-l', '--log', type=str, action='store', required=True,
+                        help='Path to the evaluation log file')
+    parser.add_argument('-o', '--output', type=str, action='store',
                         help='If given, the DataFrame is exported as' +
-                        'a csv file to the output path specified by the user')                    
+                        'a CSV file to the output path specified by the user')
     parser.add_argument('-t', '--table', action='store_true', default=False,
                         help='Defaults to "False". If given, the DataFrame' +
                         'is displayed as a table. If not given, the ' +
                         'DataFrame is displayed as a string')
-    parser.add_argument('-f', '--format', action='store', dest='table_format', 
+    parser.add_argument('-f', '--format', type=str, action='store', dest='format',
                         default='psql', help='Table format (see tablefmt in ' +
                         'tabulate documention) to be displayed only if user has ' + 
                         'chosen to display table. Defaults to "psql"')
     args = parser.parse_args()
     
     
-    display_test_metrics(args.test_log_path, args.output_path, 
-                         args.table, args.table_format)
+    display_test_metrics(args.log, args.output, args.table, args.format)
+
+
+    sys.exit(0)

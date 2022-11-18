@@ -288,7 +288,7 @@ def eval_ntg_original(container, data, ar, t_format):
 
 def train_w2b(container, gpu):
     print(f"Training Wiki2Bio in {container}...")
-    bashCommand = f"docker exec -it {container} bash -c '/root/wiki2bio/w2b.sh -train {gpu}'"
+    bashCommand = f"docker exec -it {container} bash -c '/root/wiki2bio/w2b.sh -train new {gpu}'"
     docker = subprocess.Popen(shlex.split(bashCommand), stdout=sys.stdout, stderr=sys.stderr, encoding='utf-8')
     output, error = docker.communicate()
     returncode = docker.returncode
@@ -548,7 +548,7 @@ if __name__ == "__main__":
                     "Choice: "
                     )
             if evaluate == 'T':
-                t_format = '\'psql\''
+                t_format = 'psql'
                 params = input("Please press [T]able " +
                                "if would like to select an alternative " +
                                "table display format (otherwise PSQL is used)\n" +
@@ -562,19 +562,19 @@ if __name__ == "__main__":
                         print("Wrong input")
                         continue
                     elif 'L' in formats:
-                        t_format = '\'latex\''
+                        t_format = 'latex'
                     elif 'G' in formats:
-                        t_format = '\'github\''
+                        t_format = 'github'
                     elif 'H' in formats:
-                        t_format = '\'html\''
+                        t_format = 'html'
                     elif 'P' in formats:
-                        t_format = '\'plain\''
+                        t_format = 'plain'
                 result = eval_tgen(args.container, t_format)
             elif evaluate == 'NE':
                 dec = ''
                 ar = '-nar'
                 model = ''
-                t_format = '\'psql\''
+                t_format = 'psql'
                 params = input(
                         "Please press [A]utoregressive, [D]ecayed, [P]retrained, [T]able\n" +
                         "in any order," + 
@@ -601,13 +601,13 @@ if __name__ == "__main__":
                         print("Wrong input")
                         continue
                     elif 'L' in formats:
-                        t_format = '\'latex\''
+                        t_format = 'latex'
                     elif 'G' in formats:
-                        t_format = '\'github\''
+                        t_format = 'github'
                     elif 'H' in formats:
-                        t_format = '\'html\''
+                        t_format = 'html'
                     elif 'P' in formats:
-                        t_format = '\'plain\''
+                        t_format = 'plain'
                 if 'P' in params:
                     result = eval_ntg_original(args.container, 'e2e', ar, t_format)
                 else:
@@ -638,9 +638,9 @@ if __name__ == "__main__":
                     #result = eval_ntg(args.container, 'wb', dec, ar, t_format)
             elif evaluate == 'W':
                 gpu = ''
-                model = 'new'
-                metric = '\'BLEU\''
-                t_format = '\'psql\''
+                model = 'latest'
+                metric = 'BLEU'
+                t_format = 'psql'
                 params = input("Please press [G]PU, [P]retrained, [R]ouge, [T]able\n" +
                                "in any order," +
                                "\n(1)if would like to make use of " +
@@ -658,9 +658,9 @@ if __name__ == "__main__":
                 if 'G' in params:
                     gpu = '-gpu'
                 if 'P' in params:
-                    model = 'old'
+                    model = 'best'
                 if 'R' in params:
-                    metric = '\'ROUGE\''
+                    metric = 'ROUGE'
                 if 'T' in params:
                     formats = input("Please select one of [L]aTeX, [G]itHub, [H]TML, [P]lain\n" +
                                     "Choice: "
@@ -669,13 +669,13 @@ if __name__ == "__main__":
                         print("Wrong input")
                         continue
                     elif 'L' in formats:
-                        t_format = '\'latex\''
+                        t_format = 'latex'
                     elif 'G' in formats:
-                        t_format = '\'github\''
+                        t_format = 'github'
                     elif 'H' in formats:
-                        t_format = '\'html\''
+                        t_format = 'html'
                     elif 'P' in formats:
-                        t_format = '\'plain\''
+                        t_format = 'plain'
                 result = gen_w2b(args.container, model, metric, t_format, gpu)
             elif evaluate != 'B':
                 print("Wrong input")

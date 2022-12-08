@@ -68,15 +68,15 @@ fi
 gpu=''
 if [ ! -z "$3" ]; then
     if [[ $3 == -gpu ]]; then
-        gpu='-cuda'
+        gpu='--gpu 0'
     fi
 elif [ ! -z "$4" ]; then
     if [[ $4 == -gpu ]]; then
-        gpu='-cuda'
+        gpu='--gpu 0'
     fi
 elif [ ! -z "$5" ]; then
     if [[ $5 == -gpu ]]; then
-        gpu='-cuda'
+        gpu='--gpu 0'
     fi
 fi
 
@@ -127,10 +127,10 @@ elif [[ $1 == -train ]]; then
         lte=$(ls -t /root/wiki2bio/results/res/$ltd/loads/ | head -1)
 
         # Continue training the model (up to 50 total epochs)
-        python2 /root/wiki2bio/Main.py --mode train --load $ltd/loads/$lte
+        python2 /root/wiki2bio/Main.py --mode train --load $ltd/loads/$lte $gpu
     elif [[ $2 == new ]]; then
         # Train a new model from the start
-        python2 /root/wiki2bio/Main.py --mode train
+        python2 /root/wiki2bio/Main.py --mode train $gpu
     fi
 elif [[ $1 == -test && $2 == latest ]]; then
     # Get directory of most recently trained model
@@ -144,7 +144,7 @@ elif [[ $1 == -test && $2 == latest ]]; then
         python2 /root/wiki2bio/select_best_model.py -l /root/wiki2bio/results/res/$ltd/log_train.txt --model /root/wiki2bio/results/res/$ltd/ --output /root/wiki2bio/results/res/$ltd/loads/model_best_bleu_with/ -m $3
 
         # Run main for testing user's re-trained model with the best BLEU score
-        python2 /root/wiki2bio/Main.py --mode test --load $ltd/loads/model_best_bleu_with
+        python2 /root/wiki2bio/Main.py --mode test --load $ltd/loads/model_best_bleu_with $gpu
 
         # Display results
         if [ ! -z "$4" ]; then
@@ -160,7 +160,7 @@ elif [[ $1 == -test && $2 == latest ]]; then
         python2 /root/wiki2bio/select_best_model.py -l /root/wiki2bio/results/res/$ltd/log_train.txt --model /root/wiki2bio/results/res/$ltd/ --output /root/wiki2bio/results/res/$ltd/loads/model_best_rouge_with/ -m $3
 
         # Run main for testing user's re-trained model with the best ROUGE score
-        python2 /root/wiki2bio/Main.py --mode test --load $ltd/loads/model_best_rouge_with
+        python2 /root/wiki2bio/Main.py --mode test --load $ltd/loads/model_best_rouge_with $gpu
 
         # Display results
         if [ ! -z "$4" ]; then
@@ -176,7 +176,7 @@ elif [[ $1 == -test && $2 == best ]]; then
         rm -rf /root/wiki2bio/results/res/model_best_bleu_with/table_test.csv
 
         # Run main for testing our own pre-trained model
-        python2 /root/wiki2bio/Main.py --mode test --load model_best_bleu_with
+        python2 /root/wiki2bio/Main.py --mode test --load model_best_bleu_with $gpu
 
         # Display results
         if [ ! -z "$4" ]; then
@@ -190,7 +190,7 @@ elif [[ $1 == -test && $2 == best ]]; then
         rm -rf /root/wiki2bio/results/res/model_best_rouge_with/table_test.csv
 
         # Run main for testing our own pre-trained model
-        python2 /root/wiki2bio/Main.py --mode test --load model_best_rouge_with
+        python2 /root/wiki2bio/Main.py --mode test --load model_best_rouge_with $gpu
 
         # Display results
         if [ ! -z "$4" ]; then

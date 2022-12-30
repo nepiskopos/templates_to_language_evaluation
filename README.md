@@ -3,7 +3,7 @@
 #### [MSc in Data Science and Information Technologies, NKUA](http://dsit.di.uoa.gr/)
 ### Authors:
 * [Dimitrios Roussis](https://github.com/droussis/)
-* [Nikolaos Episkopos](https://github.com/nbishdev/)
+* [Nikolaos Episkopos](https://github.com/nepiskopos/)
 
 ---
 
